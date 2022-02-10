@@ -8,7 +8,12 @@ class Splash extends GetView<SplashController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(),
+      body: Center(
+        child: Image.asset(
+          controller.image,
+          width: Get.width * .2,
+        ),
+      ),
     );
   }
 }
