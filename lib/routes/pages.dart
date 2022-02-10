@@ -1,6 +1,7 @@
 import 'package:crs/routes/routes.dart';
 import 'package:crs/screens/auth/auth.binding.dart';
 import 'package:crs/screens/auth/auth.dart';
+import 'package:crs/screens/auth/auth.middleware.dart';
 import 'package:crs/screens/navigation/navigation.binding.dart';
 import 'package:crs/screens/navigation/navigation.dart';
 import 'package:crs/screens/splash/splash.binding.dart';
@@ -18,6 +19,7 @@ class CrsPages {
       name: Routes.AUTH,
       binding: AuthBinding(),
       page: () => const Auth(),
+      middlewares: [AuthMiddleware()],
     ),
     GetPage(
       name: Routes.NAV,
