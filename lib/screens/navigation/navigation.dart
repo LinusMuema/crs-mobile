@@ -13,6 +13,10 @@ class Navigation extends GetView<NavigationController> {
     return Obx(() {
       var index = controller.selected.value;
       return Scaffold(
+        body: IndexedStack(
+          index: index,
+          children: controller.screens,
+        ),
         bottomNavigationBar: BottomNavigationBar(
           elevation: 0,
           currentIndex: index,
@@ -22,9 +26,9 @@ class Navigation extends GetView<NavigationController> {
           onTap: controller.navigate,
           showUnselectedLabels: false,
           type: BottomNavigationBarType.fixed,
-          items: controller.screens.map((e) {
+          items: controller.titles.map((e) {
             var icon = e.toLowerCase();
-            var selected = index == controller.screens.indexOf(e);
+            var selected = index == controller.titles.indexOf(e);
             return BottomNavigationBarItem(
               label: e,
               icon: Padding(
