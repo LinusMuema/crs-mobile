@@ -15,6 +15,7 @@ dependencies:
   hive:
   lottie:
   animations:
+  flutter_svg:
   hive_flutter:
   image_picker:
   google_fonts:
