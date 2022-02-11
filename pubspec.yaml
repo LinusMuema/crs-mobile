@@ -27,6 +27,7 @@ dependencies:
   cupertino_icons:
   firebase_analytics:
   firebase_messaging:
+  google_maps_flutter:
   flutter_form_builder:
   cached_network_image:
   flutter_local_notifications:
