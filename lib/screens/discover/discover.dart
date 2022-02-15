@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:crs/components/loaders.dart';
 import 'package:crs/screens/discover/discover.controller.dart';
 import 'package:crs/theme/colors.dart';
 import 'package:crs/theme/dimens.dart';
@@ -121,8 +122,9 @@ class Discover extends GetView<DiscoverController> {
                 fit: BoxFit.cover,
                 width: Get.width * .6,
                 height: Get.width * .3,
+                placeholder: (c, i) => pulse(color: black),
                 imageUrl:
-                    'https://images.pexels.com/photos/2127732/pexels-photo-2127732.jpeg?cs=srgb&dl=pexels-adrian-dorobantu-2127732.jpg&fm=jpg'),
+                    'https://images.pexels.com/photos/35619/capri-ford-oldtimer-automotive.jpg?cs=srgb&dl=pexels-pixabay-35619.jpg&fm=jpg'),
           ),
           verticalSpaceTiny,
           Padding(
