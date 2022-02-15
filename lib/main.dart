@@ -1,6 +1,7 @@
 import 'package:crs/routes/pages.dart';
 import 'package:crs/routes/routes.dart';
 import 'package:crs/services/hive.service.dart';
+import 'package:crs/services/location.service.dart';
 import 'package:crs/services/network.service.dart';
 import 'package:crs/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ void main() async {
 Future<void> initServices() async {
   await Get.putAsync(() => HiveService().init());
   await Get.putAsync(() => NetworkService().init());
+  await Get.putAsync(() => LocationService().init());
 }
 
 class CrsApp extends StatelessWidget {

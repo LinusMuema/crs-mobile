@@ -15,6 +15,7 @@ Widget horizontalSpaceMassive = SizedBox(width: Get.width * .1);
 
 const BorderRadius tinyRadius = BorderRadius.all(Radius.circular(5));
 const BorderRadius smallRadius = BorderRadius.all(Radius.circular(10));
+const BorderRadius regularRadius = BorderRadius.all(Radius.circular(15));
 const BorderRadius mediumRadius = BorderRadius.all(Radius.circular(20));
 const BorderRadius fullRadius = BorderRadius.all(Radius.circular(50));
 

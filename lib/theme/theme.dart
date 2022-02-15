@@ -8,7 +8,11 @@ ThemeData lightTheme() {
 
   TextTheme textTheme(TextTheme base) {
     return base.copyWith(
-      headline6: base.headline6!.copyWith(color: black),
+      headline4: base.headline4!.copyWith(
+        color: black,
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+      ),
       bodyText1: base.bodyText1!.copyWith(color: black),
     );
   }

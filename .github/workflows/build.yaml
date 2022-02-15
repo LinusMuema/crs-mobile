@@ -1,0 +1,48 @@
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, 'build')"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
+
+      # Setup Java
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+
+      # Configure flutter
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - run: flutter pub get
+
+      # Extract google services json and build apk
+      - name: Apk build
+        run: |
+          mkdir $HOME/secrets
+          gpg --quiet --batch --yes --decrypt --passphrase="$GPG_SECRET" \
+          --output $HOME/secrets/secrets.tar secrets.tar.gpg
+          tar xvf $HOME/secrets/secrets.tar
+          flutter build apk --release --target-platform android-arm64
+        env:
+          GPG_SECRET: ${{ secrets.GPG_SECRET }}
+
+      # Tag the release
+      - name: Generate release tag
+        id: tag
+        run: |
+          echo "::set-output name=release_tag::crs_$(date +"%Y.%m.%d_%H.%M")"
+
+      # Upload the apk
+      - name: Upload the apk to releases
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          files: build/app/outputs/apk/release/app-release.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

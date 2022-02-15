@@ -12,6 +12,8 @@ class SplashController extends GetxController {
 
   void redirect() async {
     await 2.delay();
-    Get.toNamed(Routes.AUTH);
+
+    // TODO: redirect to auth
+    Get.toNamed(Routes.NAV);
   }
 }
