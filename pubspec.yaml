@@ -15,12 +15,14 @@ dependencies:
   hive:
   lottie:
   animations:
+  geolocator:
   flutter_svg:
   hive_flutter:
   image_picker:
   google_fonts:
   firebase_core:
   supercharged:
+
   flutter_spinkit:
   carousel_slider:
   json_annotation:
