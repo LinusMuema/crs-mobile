@@ -22,13 +22,13 @@ dependencies:
   google_fonts:
   firebase_core:
   supercharged:
-
   flutter_spinkit:
   carousel_slider:
   json_annotation:
   cupertino_icons:
   firebase_analytics:
   firebase_messaging:
+  custom_info_window:
   google_maps_flutter:
   flutter_form_builder:
   cached_network_image:

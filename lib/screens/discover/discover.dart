@@ -1,9 +1,9 @@
-import 'dart:async';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crs/screens/discover/discover.controller.dart';
 import 'package:crs/theme/colors.dart';
 import 'package:crs/theme/dimens.dart';
 import 'package:crs/theme/typography.dart';
+import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -13,59 +13,156 @@ class Discover extends GetView<DiscoverController> {
 
   @override
   Widget build(BuildContext context) {
-    Completer<GoogleMapController> _controller = Completer();
+    return Obx(() {
+      var markers = <Marker>{};
+      var target = const LatLng(0.0, 0.0);
+      var position = CameraPosition(target: target, zoom: 14);
 
-    CameraPosition _kGooglePlex = const CameraPosition(
-      target: LatLng(37.42796133580664, -122.085749655962),
-      zoom: 14.4746,
-    );
+      var current = controller.current.value;
+      var windowController = controller.windowController;
+      if (current != null) {
+        var mapController = controller.mapController.value!;
 
-    return Scaffold(
-      body: Stack(
-        children: [
-          SizedBox(
-            height: Get.height * .5,
-            child: GoogleMap(
-              initialCameraPosition: _kGooglePlex,
-              onMapCreated: (GoogleMapController controller) {
-                _controller.complete(controller);
+        target = LatLng(current.latitude, current.longitude);
+        position = CameraPosition(target: target, zoom: 16);
+        mapController.animateCamera(CameraUpdate.newCameraPosition(position));
+
+        markers.addAll(
+          controller.available.map((e) {
+            return Marker(
+              position: e,
+              icon: controller.icon.value!,
+              markerId: MarkerId(e.toString()),
+              onTap: () {
+                windowController.addInfoWindow!(window(), e);
               },
+            );
+          }),
+        );
+      }
+
+      return Scaffold(
+        body: Stack(
+          children: [
+            SizedBox(
+              height: Get.height * .7,
+              child: Stack(
+                children: [
+                  GoogleMap(
+                    markers: markers,
+                    myLocationEnabled: true,
+                    zoomControlsEnabled: false,
+                    myLocationButtonEnabled: false,
+                    initialCameraPosition: position,
+                    onMapCreated: controller.mapCreated,
+                    onTap: (p) => windowController.hideInfoWindow!(),
+                    onCameraMove: (p) => windowController.onCameraMove!(),
+                  ),
+                  CustomInfoWindow(
+                    width: Get.width * .6,
+                    height: Get.width * .5,
+                    controller: windowController,
+                  ),
+                ],
+              ),
             ),
-          ),
-          DraggableScrollableSheet(
-            minChildSize: .5,
-            initialChildSize: .5,
-            builder: (context, controller) {
-              return SingleChildScrollView(
-                controller: controller,
-                child: Card(
-                  elevation: 10,
-                  margin: EdgeInsets.zero,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(20),
+            DraggableScrollableSheet(
+              minChildSize: .4,
+              initialChildSize: .4,
+              builder: (context, controller) {
+                return SingleChildScrollView(
+                  controller: controller,
+                  child: Card(
+                    elevation: 10,
+                    margin: EdgeInsets.zero,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        verticalSpaceSmall,
+                        Container(
+                          height: 5,
+                          width: 30,
+                          decoration: BoxDecoration(
+                            borderRadius: fullRadius,
+                            color: black.withOpacity(.5),
+                          ),
+                        ),
+                        verticalSpaceTiny,
+                        Text('Available vehicles', style: heading1),
+                        Container(height: Get.height)
+                      ],
                     ),
                   ),
-                  child: Column(
-                    children: [
-                      verticalSpaceSmall,
-                      Container(
-                        height: 5,
-                        width: 30,
-                        decoration: BoxDecoration(
-                          borderRadius: fullRadius,
-                          color: black.withOpacity(.5),
-                        ),
-                      ),
-                      verticalSpaceTiny,
-                      Text('Available vehicles', style: heading),
-                      Container(height: Get.height)
-                    ],
-                  ),
+                );
+              },
+            )
+          ],
+        ),
+      );
+    });
+  }
+
+  Widget window() {
+    const radius = BorderRadius.vertical(top: Radius.circular(15));
+    const shape = RoundedRectangleBorder(borderRadius: regularRadius);
+
+    return Card(
+      elevation: 10,
+      shape: shape,
+      child: Column(
+        children: [
+          ClipRRect(
+            borderRadius: radius,
+            child: CachedNetworkImage(
+                fit: BoxFit.cover,
+                width: Get.width * .6,
+                height: Get.width * .3,
+                imageUrl:
+                    'https://images.pexels.com/photos/2127732/pexels-photo-2127732.jpeg?cs=srgb&dl=pexels-adrian-dorobantu-2127732.jpg&fm=jpg'),
+          ),
+          verticalSpaceTiny,
+          Padding(
+            padding: regularHInsets,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Nissan note', style: heading1),
+                    Text('Ksh. 500/hr', style: heading4)
+                  ],
                 ),
-              );
-            },
-          )
+                verticalSpaceTiny,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Available from:', style: body1),
+                        Text('8:00 am to 7:00 pm', style: body1)
+                      ],
+                    ),
+                    Container(
+                      padding: smallInsets,
+                      width: Get.width * .2,
+                      alignment: Alignment.center,
+                      decoration: const BoxDecoration(
+                        color: black,
+                        borderRadius: fullRadius,
+                      ),
+                      child: Text('View', style: body2),
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
