@@ -1,3 +1,4 @@
+import 'package:crs/components/loaders.dart';
 import 'package:crs/screens/auth/auth.controller.dart';
 import 'package:crs/theme/colors.dart';
 import 'package:crs/theme/dimens.dart';
@@ -13,7 +14,7 @@ class Login extends GetWidget<AuthController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      var hidden = controller.hidden.value;
+      var hidden = controller.passwordHidden.value;
       var icon = hidden ? Icons.visibility_off : Icons.visibility;
 
       var email = FormBuilderValidators.email(context);
@@ -41,6 +42,9 @@ class Login extends GetWidget<AuthController> {
                 FormBuilderTextField(
                   name: 'email',
                   validator: emailValidator,
+                  valueTransformer: (String? value) {
+                    return value!.trim().toLowerCase();
+                  },
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     label: const Text('Email address'),
@@ -59,14 +63,16 @@ class Login extends GetWidget<AuthController> {
                     suffixIcon: IconButton(
                       color: grey,
                       icon: Icon(icon),
-                      onPressed: controller.hidden.toggle,
+                      onPressed: controller.passwordHidden.toggle,
                     ),
                   ),
                 ),
                 verticalSpaceRegular,
                 ElevatedButton(
                   onPressed: controller.login,
-                  child: Text('login', style: body2),
+                  child: controller.loading.value
+                      ? threeBounce()
+                      : Text('login', style: body2),
                 ),
                 verticalSpaceSmall,
                 GestureDetector(
