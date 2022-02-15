@@ -21,29 +21,28 @@ ThemeData lightTheme() {
     return ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         elevation: 0.0,
-        primary: white,
-        onPrimary: black,
+        primary: black,
+        onPrimary: white,
         minimumSize: Size(double.infinity, Get.height * .06),
-        shape: const RoundedRectangleBorder(borderRadius: smallRadius),
+        shape: const RoundedRectangleBorder(borderRadius: fullRadius),
       ),
     );
   }
 
   TextSelectionThemeData textSelectionTheme = const TextSelectionThemeData(
-    cursorColor: white,
+    cursorColor: black,
+    selectionColor: grey,
+    selectionHandleColor: black,
   );
 
   InputDecorationTheme inputDecorationTheme(InputDecorationTheme base) {
     return base.copyWith(
-      filled: true,
-      errorBorder: inputBorder,
-      enabledBorder: inputBorder,
-      focusedBorder: inputBorder,
-      fillColor: grey.withOpacity(.2),
-      focusColor: grey.withOpacity(.2),
+      contentPadding: largeInsets,
+      border: getInputBorder(color: black),
+      errorBorder: getInputBorder(color: red),
+      enabledBorder: getInputBorder(color: grey),
+      focusedBorder: getInputBorder(color: black),
       floatingLabelBehavior: FloatingLabelBehavior.never,
-      errorStyle: const TextStyle(color: red, fontFamily: 'Poppins'),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 25),
     );
   }
 

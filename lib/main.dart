@@ -6,6 +6,7 @@ import 'package:crs/services/network.service.dart';
 import 'package:crs/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:form_builder_validators/localization/l10n.dart';
 import 'package:get/get.dart';
 
 void main() async {
@@ -29,6 +30,7 @@ class CrsApp extends StatelessWidget {
       theme: lightTheme(),
       getPages: CrsPages.pages,
       initialRoute: Routes.SPLASH,
+      localizationsDelegates: const [FormBuilderLocalizations.delegate],
     );
   }
 }

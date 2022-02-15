@@ -32,6 +32,7 @@ dependencies:
   google_maps_flutter:
   flutter_form_builder:
   cached_network_image:
+  form_builder_validators:
   flutter_local_notifications:
 
 dev_dependencies:

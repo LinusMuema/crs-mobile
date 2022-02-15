@@ -19,10 +19,12 @@ const BorderRadius regularRadius = BorderRadius.all(Radius.circular(15));
 const BorderRadius mediumRadius = BorderRadius.all(Radius.circular(20));
 const BorderRadius fullRadius = BorderRadius.all(Radius.circular(50));
 
-OutlineInputBorder inputBorder = OutlineInputBorder(
-  borderSide: BorderSide.none,
-  borderRadius: BorderRadius.circular(10),
-);
+OutlineInputBorder getInputBorder({required Color color}) {
+  return OutlineInputBorder(
+    borderRadius: fullRadius,
+    borderSide: BorderSide(color: color),
+  );
+}
 
 //Padding
 const smallInsets = EdgeInsets.all(5);

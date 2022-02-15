@@ -7,8 +7,13 @@ class Auth extends GetView<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(),
-    );
+    return Obx(() {
+      return Scaffold(
+        body: IndexedStack(
+          index: controller.page.value,
+          children: controller.screens,
+        ),
+      );
+    });
   }
 }
