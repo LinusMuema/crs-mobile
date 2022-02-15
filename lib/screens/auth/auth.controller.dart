@@ -56,7 +56,7 @@ class AuthController extends GetxController {
   void signup() async {
     if (signupKey.currentState!.validate()) {
       signupKey.currentState!.save();
-      String endpoint = 'api/auth/login';
+      String endpoint = 'api/auth/signup';
       dynamic data = signupKey.currentState!.value;
 
       if (data['password'] != data['confirm']) {
@@ -80,7 +80,11 @@ class AuthController extends GetxController {
         // navigate to home
         Get.offAllNamed(Routes.NAV);
       } else {
-        String message = response.body['message'];
+        String message = response.body['message'].toString();
+
+        if (message.contains('email')) message = 'email already in use';
+        if (message.contains('phone')) message = 'phone number already in use';
+
         snackBar('Error', message);
       }
     }
