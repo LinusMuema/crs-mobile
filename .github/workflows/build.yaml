@@ -22,12 +22,7 @@ jobs:
 
       # Extract google services json and build apk
       - name: Apk build
-        run: |
-          mkdir $HOME/secrets
-          gpg --quiet --batch --yes --decrypt --passphrase="$GPG_SECRET" \
-          --output $HOME/secrets/secrets.tar secrets.tar.gpg
-          tar xvf $HOME/secrets/secrets.tar
-          flutter build apk --release --target-platform android-arm64
+        run: flutter build apk --release --target-platform android-arm64
         env:
           GPG_SECRET: ${{ secrets.GPG_SECRET }}
 
