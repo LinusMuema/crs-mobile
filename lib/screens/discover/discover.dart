@@ -114,58 +114,42 @@ class Discover extends GetView<DiscoverController> {
     return Card(
       elevation: 10,
       shape: shape,
-      child: Column(
-        children: [
-          ClipRRect(
-            borderRadius: radius,
-            child: CachedNetworkImage(
-                fit: BoxFit.cover,
-                width: Get.width * .6,
-                height: Get.width * .3,
-                placeholder: (c, i) => pulse(color: black),
-                imageUrl:
-                    'https://images.pexels.com/photos/35619/capri-ford-oldtimer-automotive.jpg?cs=srgb&dl=pexels-pixabay-35619.jpg&fm=jpg'),
-          ),
-          verticalSpaceTiny,
-          Padding(
-            padding: regularHInsets,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Nissan note', style: heading1),
-                    Text('Ksh. 500/hr', style: heading4)
-                  ],
-                ),
-                verticalSpaceTiny,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Available from:', style: body1),
-                        Text('8:00 am to 7:00 pm', style: body1)
-                      ],
-                    ),
-                    Container(
-                      padding: smallInsets,
-                      width: Get.width * .2,
-                      alignment: Alignment.center,
-                      decoration: const BoxDecoration(
-                        color: black,
-                        borderRadius: fullRadius,
-                      ),
-                      child: Text('View', style: body2),
-                    )
-                  ],
-                ),
-              ],
+      child: InkWell(
+        onTap: () {},
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: radius,
+              child: CachedNetworkImage(
+                  fit: BoxFit.cover,
+                  width: Get.width * .6,
+                  height: Get.width * .3,
+                  placeholder: (c, i) => pulse(color: black),
+                  imageUrl:
+                      'https://images.pexels.com/photos/35619/capri-ford-oldtimer-automotive.jpg?cs=srgb&dl=pexels-pixabay-35619.jpg&fm=jpg'),
             ),
-          ),
-        ],
+            verticalSpaceTiny,
+            Padding(
+              padding: regularHInsets,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Nissan note', style: heading1),
+                      Text('Ksh. 500/hr', style: heading4)
+                    ],
+                  ),
+                  verticalSpaceTiny,
+                  Text('Available from:', style: body1),
+                  Text('8:00 am to 7:00 pm', style: body1),
+                  verticalSpaceTiny,
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
