@@ -22,6 +22,7 @@ dependencies:
   google_fonts:
   firebase_core:
   supercharged:
+  cloudinary_sdk:
   flutter_spinkit:
   carousel_slider:
   json_annotation:
