@@ -6,6 +6,8 @@ import 'package:crs/screens/navigation/navigation.binding.dart';
 import 'package:crs/screens/navigation/navigation.dart';
 import 'package:crs/screens/splash/splash.binding.dart';
 import 'package:crs/screens/splash/splash.dart';
+import 'package:crs/screens/vehicle/vehicle.binding..dart';
+import 'package:crs/screens/vehicle/vehicle.dart';
 import 'package:get/get.dart';
 
 class CrsPages {
@@ -26,5 +28,10 @@ class CrsPages {
       binding: NavigationBinding(),
       page: () => const Navigation(),
     ),
+    GetPage(
+      name: Routes.VEHICLE,
+      binding: VehicleBinding(),
+      page: () => const Vehicle(),
+    )
   ];
 }

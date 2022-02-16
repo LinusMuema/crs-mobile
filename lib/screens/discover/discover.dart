@@ -61,7 +61,7 @@ class Discover extends GetView<DiscoverController> {
                   ),
                   CustomInfoWindow(
                     width: Get.width * .6,
-                    height: Get.width * .5,
+                    height: Get.width * .55,
                     controller: windowController,
                   ),
                 ],

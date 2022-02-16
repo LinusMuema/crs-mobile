@@ -1,3 +1,4 @@
+import 'package:crs/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,9 +20,12 @@ const BorderRadius regularRadius = BorderRadius.all(Radius.circular(15));
 const BorderRadius mediumRadius = BorderRadius.all(Radius.circular(20));
 const BorderRadius fullRadius = BorderRadius.all(Radius.circular(50));
 
-OutlineInputBorder getInputBorder({required Color color}) {
+OutlineInputBorder getInputBorder({
+  Color color = grey,
+  BorderRadius radius = fullRadius,
+}) {
   return OutlineInputBorder(
-    borderRadius: fullRadius,
+    borderRadius: radius,
     borderSide: BorderSide(color: color),
   );
 }

@@ -1,3 +1,4 @@
+import 'package:crs/routes/routes.dart';
 import 'package:crs/screens/garage/garage.controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,6 +8,11 @@ class Garage extends GetView<GarageController> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Get.toNamed(Routes.VEHICLE),
+        child: const Icon(Icons.add),
+      ),
+    );
   }
 }
