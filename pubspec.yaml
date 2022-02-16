@@ -26,6 +26,7 @@ dependencies:
   carousel_slider:
   json_annotation:
   cupertino_icons:
+  flutter_typeahead:
   firebase_analytics:
   firebase_messaging:
   custom_info_window:

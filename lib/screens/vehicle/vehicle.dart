@@ -6,6 +6,8 @@ import 'package:crs/theme/dimens.dart';
 import 'package:crs/theme/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 
 class Vehicle extends GetView<VehicleController> {
@@ -14,6 +16,10 @@ class Vehicle extends GetView<VehicleController> {
   @override
   Widget build(BuildContext context) {
     var border = getInputBorder(radius: smallRadius);
+    var errorBorder = getInputBorder(radius: smallRadius, color: red);
+
+    var required = FormBuilderValidators.required(context);
+    var validator = FormBuilderValidators.compose([required]);
 
     return Obx(() {
       var images = [upload()];
@@ -22,6 +28,7 @@ class Vehicle extends GetView<VehicleController> {
       }
 
       return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: FormBuilder(
           key: controller.formKey,
           child: SafeArea(
@@ -41,42 +48,53 @@ class Vehicle extends GetView<VehicleController> {
                   ),
                   verticalSpaceSmall,
                   FormBuilderTextField(
+                    style: body1,
                     name: 'plate',
+                    validator: validator,
                     decoration: InputDecoration(
                       labelStyle: body3,
                       labelText: 'Number plate',
                       enabledBorder: border,
                       focusedBorder: border,
+                      errorBorder: errorBorder,
                     ),
                   ),
                   verticalSpaceTiny,
                   Row(
                     children: [
                       Expanded(
-                        child: FormBuilderDropdown(
-                          name: 'make',
-                          decoration: InputDecoration(
-                            labelStyle: body3,
-                            labelText: 'Make',
-                            enabledBorder: border,
-                            focusedBorder: border,
+                        child: TypeAheadFormField(
+                          validator: validator,
+                          onSuggestionSelected: controller.setSuggestion,
+                          suggestionsCallback: controller.getSuggestions,
+                          itemBuilder: (context, String value) {
+                            return ListTile(title: Text(value, style: body1));
+                          },
+                          textFieldConfiguration: TextFieldConfiguration(
+                            style: body1,
+                            controller: controller.textController,
+                            decoration: InputDecoration(
+                              labelStyle: body3,
+                              labelText: 'Make',
+                              enabledBorder: border,
+                              focusedBorder: border,
+                              errorBorder: errorBorder,
+                            ),
                           ),
-                          items: controller.makes
-                              .map((e) => DropdownMenuItem(
-                                  value: e.toLowerCase(),
-                                  child: Text(e, style: body1)))
-                              .toList(),
                         ),
                       ),
                       horizontalSpaceSmall,
                       Expanded(
                         child: FormBuilderTextField(
+                          style: body1,
                           name: 'model',
+                          validator: validator,
                           decoration: InputDecoration(
                             labelStyle: body3,
                             labelText: 'Model',
                             enabledBorder: border,
                             focusedBorder: border,
+                            errorBorder: errorBorder,
                           ),
                         ),
                       ),
@@ -84,25 +102,36 @@ class Vehicle extends GetView<VehicleController> {
                   ),
                   verticalSpaceTiny,
                   FormBuilderTextField(
+                    style: body1,
                     name: 'color',
+                    validator: validator,
                     decoration: InputDecoration(
                       labelStyle: body3,
                       labelText: 'Color',
                       enabledBorder: border,
                       focusedBorder: border,
+                      errorBorder: errorBorder,
                     ),
                   ),
                   verticalSpaceTiny,
                   FormBuilderTextField(
-                    name: 'plate',
                     maxLines: 5,
+                    style: body1,
+                    name: 'plate',
+                    validator: validator,
                     decoration: InputDecoration(
                       labelStyle: body3,
                       labelText: 'Description',
                       enabledBorder: border,
                       focusedBorder: border,
+                      errorBorder: errorBorder,
                     ),
                   ),
+                  verticalSpaceSmall,
+                  ElevatedButton(
+                    onPressed: controller.submit,
+                    child: Text('submit', style: body2),
+                  )
                 ],
               ),
             ),
@@ -113,12 +142,13 @@ class Vehicle extends GetView<VehicleController> {
   }
 
   Widget image(Uint8List bytes) {
-    return SizedBox(
+    return Container(
+      margin: smallHInsets,
       width: Get.width * .2,
       height: Get.width * .2,
       child: ClipRRect(
         borderRadius: fullRadius,
-        child: Image.memory(bytes),
+        child: Image.memory(bytes, fit: BoxFit.cover),
       ),
     );
   }
@@ -127,6 +157,7 @@ class Vehicle extends GetView<VehicleController> {
     return GestureDetector(
       onTap: controller.pickImage,
       child: Container(
+        margin: smallHInsets,
         width: Get.width * .2,
         height: Get.width * .2,
         alignment: Alignment.center,

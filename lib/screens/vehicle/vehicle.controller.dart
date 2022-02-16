@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:crs/components/snackbars.dart';
@@ -10,6 +11,7 @@ class VehicleController extends GetxController {
   final CameraService cameraService = Get.find();
 
   final GlobalKey<FormBuilderState> formKey = GlobalKey();
+  final TextEditingController textController = TextEditingController();
 
   RxList<Uint8List> images = <Uint8List>[].obs;
 
@@ -27,6 +29,11 @@ class VehicleController extends GetxController {
   ];
 
   void pickImage() async {
+    if (images.length == 3) {
+      snackBar('Limit', 'You cannot upload more than three images');
+      return;
+    }
+
     var image = await cameraService.getImage();
     if (image == null) {
       snackBar('Image', 'Image upload cancelled');
@@ -34,5 +41,20 @@ class VehicleController extends GetxController {
     }
 
     images.add(image);
+  }
+
+  Future<List<String>> getSuggestions(String pattern) async => makes
+      .where((e) => e.toLowerCase().contains(pattern.toLowerCase()))
+      .toList();
+
+  void setSuggestion(String suggestion) {
+    textController.text = suggestion;
+    formKey.currentState!.fields['make']!.didChange(suggestion);
+  }
+
+  void submit() async {
+    if (formKey.currentState!.validate()) {
+      // TODO: implement the upload function
+    }
   }
 }

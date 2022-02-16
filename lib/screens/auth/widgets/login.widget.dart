@@ -40,6 +40,7 @@ class Login extends GetWidget<AuthController> {
                 ),
                 verticalSpaceRegular,
                 FormBuilderTextField(
+                  style: body1,
                   name: 'email',
                   validator: emailValidator,
                   valueTransformer: (String? value) {
@@ -53,6 +54,7 @@ class Login extends GetWidget<AuthController> {
                 ),
                 verticalSpaceSmall,
                 FormBuilderTextField(
+                  style: body1,
                   name: 'password',
                   obscureText: hidden,
                   validator: passwordValidator,

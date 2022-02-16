@@ -43,6 +43,7 @@ class Signup extends GetWidget<AuthController> {
                 ),
                 verticalSpaceRegular,
                 FormBuilderTextField(
+                  style: body1,
                   name: 'email',
                   validator: emailValidator,
                   valueTransformer: (String? value) {
@@ -56,6 +57,7 @@ class Signup extends GetWidget<AuthController> {
                 ),
                 verticalSpaceSmall,
                 FormBuilderTextField(
+                  style: body1,
                   name: 'password',
                   obscureText: hidden,
                   validator: passwordValidator,
@@ -72,6 +74,7 @@ class Signup extends GetWidget<AuthController> {
                 ),
                 verticalSpaceSmall,
                 FormBuilderTextField(
+                  style: body1,
                   name: 'confirm',
                   obscureText: confirm,
                   validator: passwordValidator,
