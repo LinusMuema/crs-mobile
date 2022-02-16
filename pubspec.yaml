@@ -18,6 +18,7 @@ dependencies:
   geolocator:
   flutter_svg:
   hive_flutter:
+  short_uuids:
   image_picker:
   google_fonts:
   firebase_core:

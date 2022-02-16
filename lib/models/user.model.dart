@@ -20,8 +20,12 @@ class User {
   @HiveField(3)
   String avatar;
 
+  @HiveField(4)
+  String email;
+
   User({
     required this.id,
+    required this.email,
     required this.phone,
     required this.avatar,
     required this.username,

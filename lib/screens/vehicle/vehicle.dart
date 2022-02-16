@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:crs/components/loaders.dart';
 import 'package:crs/screens/vehicle/vehicle.controller.dart';
 import 'package:crs/theme/colors.dart';
 import 'package:crs/theme/dimens.dart';
@@ -24,7 +26,8 @@ class Vehicle extends GetView<VehicleController> {
     return Obx(() {
       var images = [upload()];
       for (var e in controller.images) {
-        images.add(image(e));
+        var index = controller.images.indexOf(e);
+        images.add(image(e, index));
       }
 
       return Scaffold(
@@ -117,7 +120,7 @@ class Vehicle extends GetView<VehicleController> {
                   FormBuilderTextField(
                     maxLines: 5,
                     style: body1,
-                    name: 'plate',
+                    name: 'description',
                     validator: validator,
                     decoration: InputDecoration(
                       labelStyle: body3,
@@ -141,14 +144,43 @@ class Vehicle extends GetView<VehicleController> {
     });
   }
 
-  Widget image(Uint8List bytes) {
-    return Container(
-      margin: smallHInsets,
-      width: Get.width * .2,
-      height: Get.width * .2,
-      child: ClipRRect(
-        borderRadius: fullRadius,
-        child: Image.memory(bytes, fit: BoxFit.cover),
+  Widget image(Uint8List bytes, int index) {
+    var loading = controller.uploading[index];
+    return GestureDetector(
+      onTap: () {
+        Get.snackbar(
+          'Delete',
+          'Are you sure you want to remove this image?',
+          backgroundColor: white,
+          duration: const Duration(seconds: 5),
+          mainButton: TextButton(
+            onPressed: () => controller.removeImage(index),
+            child: Text('Delete', style: body5),
+          ),
+        );
+      },
+      child: Container(
+        margin: smallHInsets,
+        width: Get.width * .2,
+        height: Get.width * .2,
+        child: ClipRRect(
+          borderRadius: fullRadius,
+          child: Stack(
+            children: [
+              Image.memory(bytes, fit: BoxFit.cover),
+              !loading
+                  ? CachedNetworkImage(
+                      fit: BoxFit.cover,
+                      placeholder: (c, i) => pulse(color: black),
+                      imageUrl: controller.urls[index],
+                    )
+                  : Container(
+                      color: white.withOpacity(.7),
+                      child: pulse(color: black),
+                    )
+            ],
+          ),
+        ),
       ),
     );
   }
