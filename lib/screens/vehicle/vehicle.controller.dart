@@ -60,7 +60,7 @@ class VehicleController extends GetxController {
 
     const short = ShortUuid();
     var name = short.generate();
-    var path = '/crs/vehicles/${user.value!}';
+    var path = '/crs/vehicles/${user.value!.email}';
 
     images.add(image);
     uploading.add(true);
@@ -85,10 +85,7 @@ class VehicleController extends GetxController {
       .where((e) => e.toLowerCase().contains(pattern.toLowerCase()))
       .toList();
 
-  void setSuggestion(String suggestion) {
-    textController.text = suggestion;
-    formKey.currentState!.fields['make']!.didChange(suggestion);
-  }
+  void setSuggestion(String suggestion) => textController.text = suggestion;
 
   void submit() async {
     if (formKey.currentState!.validate()) {
@@ -96,7 +93,9 @@ class VehicleController extends GetxController {
 
       dynamic formData = formKey.currentState!.value;
       Map<String, dynamic> data = Map.from(formData);
-      print(data);
+      data['images'] = urls;
+      data['make'] = textController.text;
+
       // TODO: implement the upload function
     }
   }
