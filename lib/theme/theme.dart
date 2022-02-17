@@ -46,16 +46,23 @@ ThemeData lightTheme() {
     );
   }
 
+  FloatingActionButtonThemeData fabTheme = const FloatingActionButtonThemeData(
+    backgroundColor: black,
+  );
+
+  ColorScheme colorScheme = ColorScheme.fromSwatch().copyWith(
+    primary: white,
+    onSurface: black,
+  );
+
   return base.copyWith(
     errorColor: red,
     primaryColor: white,
+    colorScheme: colorScheme,
+    floatingActionButtonTheme: fabTheme,
     textTheme: textTheme(base.textTheme),
     textSelectionTheme: textSelectionTheme,
     elevatedButtonTheme: buttonThemeData(),
-    colorScheme: ColorScheme.fromSwatch().copyWith(
-      primary: white,
-      onSurface: black,
-    ),
     inputDecorationTheme: inputDecorationTheme(base.inputDecorationTheme),
   );
 }
