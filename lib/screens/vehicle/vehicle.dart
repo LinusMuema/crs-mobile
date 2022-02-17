@@ -133,7 +133,9 @@ class Vehicle extends GetView<VehicleController> {
                   verticalSpaceSmall,
                   ElevatedButton(
                     onPressed: controller.submit,
-                    child: Text('submit', style: body2),
+                    child: controller.loading.value
+                        ? threeBounce()
+                        : Text('submit', style: body2),
                   )
                 ],
               ),

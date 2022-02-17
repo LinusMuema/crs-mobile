@@ -23,6 +23,7 @@ class VehicleController extends GetxController {
   final TextEditingController textController = TextEditingController();
 
   Rxn<User> user = Rxn();
+  RxBool loading = false.obs;
   RxList<String> urls = <String>[].obs;
   RxList<bool> uploading = <bool>[].obs;
   RxList<Uint8List> images = <Uint8List>[].obs;
@@ -89,14 +90,29 @@ class VehicleController extends GetxController {
 
   void submit() async {
     if (formKey.currentState!.validate()) {
+      if (urls.isEmpty) {
+        snackBar('Images', 'Upload at least one image of your vehicle');
+        return;
+      }
+
       formKey.currentState!.save();
 
       dynamic formData = formKey.currentState!.value;
       Map<String, dynamic> data = Map.from(formData);
       data['images'] = urls;
-      data['make'] = textController.text;
+      data['make'] = textController.text.toLowerCase();
 
-      // TODO: implement the upload function
+      loading.value = true;
+      String endpoint = 'api/vehicles';
+      Response response = await networkService.post(endpoint, data);
+      if (response.isOk) {
+        Get.back();
+        snackBar('Success', 'Your vehicle has been successfully registered');
+      } else {
+        String message = response.body['message'];
+        snackBar('Error', message);
+      }
+      loading.value = false;
     }
   }
 }
