@@ -3,6 +3,8 @@ import 'dart:typed_data';
 
 import 'package:crs/components/snackbars.dart';
 import 'package:crs/models/user.model.dart';
+import 'package:crs/models/vehicle.model.dart';
+import 'package:crs/screens/garage/garage.controller.dart';
 import 'package:crs/services/camera.service.dart';
 import 'package:crs/services/cloudinary.service.dart';
 import 'package:crs/services/hive.service.dart';
@@ -106,6 +108,10 @@ class VehicleController extends GetxController {
       String endpoint = 'api/vehicles';
       Response response = await networkService.post(endpoint, data);
       if (response.isOk) {
+        var vehicle = Vehicle.fromJson(response.body);
+        GarageController controller = Get.find();
+        controller.addVehicle(vehicle);
+
         Get.back();
         snackBar('Success', 'Your vehicle has been successfully registered');
       } else {
