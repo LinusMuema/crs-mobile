@@ -39,6 +39,7 @@ class AuthController extends GetxController {
         // save the web token
         String token = response.body['token'];
         hiveService.set(Constants.TOKEN, token);
+        networkService.setToken();
 
         // save the user profile
         User user = User.fromJson(response.body['user']);
@@ -72,6 +73,7 @@ class AuthController extends GetxController {
         // save the web token
         String token = response.body['token'];
         hiveService.set(Constants.TOKEN, token);
+        networkService.setToken();
 
         // save the user profile
         User user = User.fromJson(response.body['user']);

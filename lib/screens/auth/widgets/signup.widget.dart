@@ -22,7 +22,9 @@ class Signup extends GetWidget<AuthController> {
 
       var email = FormBuilderValidators.email(context);
       var required = FormBuilderValidators.required(context);
+      var phone = FormBuilderValidators.minLength(context, 10);
 
+      var phoneValidator = FormBuilderValidators.compose([phone]);
       var passwordValidator = FormBuilderValidators.compose([required]);
       var emailValidator = FormBuilderValidators.compose([required, email]);
 
@@ -52,6 +54,17 @@ class Signup extends GetWidget<AuthController> {
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     label: const Text('Email address'),
+                    labelStyle: body3,
+                  ),
+                ),
+                verticalSpaceSmall,
+                FormBuilderTextField(
+                  style: body1,
+                  name: 'phone',
+                  validator: phoneValidator,
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(
+                    label: const Text('Phone e.g. 07...'),
                     labelStyle: body3,
                   ),
                 ),
