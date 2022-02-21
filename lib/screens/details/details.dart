@@ -51,7 +51,22 @@ class Details extends GetView<DetailsController> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(vehicle.getName()!, style: heading1),
-                                Text('Ksh ${vehicle.rate}/hr', style: heading4),
+                                !controller.owned.value
+                                    ? Text('Ksh ${vehicle.rate}/hr',
+                                        style: heading4)
+                                    : GestureDetector(
+                                        onTap: controller.editVehicle,
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          width: Get.width * .2,
+                                          padding: smallVInsets,
+                                          decoration: const BoxDecoration(
+                                            color: black,
+                                            borderRadius: fullRadius,
+                                          ),
+                                          child: Text('Edit', style: body2),
+                                        ),
+                                      ),
                               ],
                             ),
                             verticalSpaceTiny,
@@ -65,27 +80,32 @@ class Details extends GetView<DetailsController> {
                               ],
                             ),
                             verticalSpaceSmall,
-                            Row(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: fullRadius,
-                                  child: CachedNetworkImage(
-                                    fit: BoxFit.cover,
-                                    width: Get.width * .15,
-                                    imageUrl: vehicle.user.avatar,
-                                    placeholder: (c, i) => pulse(color: black),
-                                  ),
-                                ),
-                                horizontalSpaceSmall,
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(vehicle.user.username, style: body1),
-                                    Text(vehicle.user.phone, style: body1)
-                                  ],
-                                ),
-                              ],
-                            ),
+                            !controller.owned.value
+                                ? Row(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: fullRadius,
+                                        child: CachedNetworkImage(
+                                          fit: BoxFit.cover,
+                                          width: Get.width * .15,
+                                          imageUrl: vehicle.user.avatar,
+                                          placeholder: (c, i) =>
+                                              pulse(color: black),
+                                        ),
+                                      ),
+                                      horizontalSpaceSmall,
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(vehicle.user.username,
+                                              style: body1),
+                                          Text(vehicle.user.phone, style: body1)
+                                        ],
+                                      ),
+                                    ],
+                                  )
+                                : Container(),
                             verticalSpaceSmall,
                             Text(vehicle.description, style: body1),
                             verticalSpaceLarge,
@@ -97,16 +117,18 @@ class Details extends GetView<DetailsController> {
                 ],
               ),
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: smallInsets,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: Text('Request', style: body2),
-                ),
-              ),
-            )
+            !controller.owned.value
+                ? Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: smallInsets,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        child: Text('Request', style: body2),
+                      ),
+                    ),
+                  )
+                : Container()
           ],
         ),
       );
