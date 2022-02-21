@@ -1,7 +1,10 @@
 import 'package:crs/components/snackbars.dart';
 import 'package:crs/models/vehicle.model.dart';
+import 'package:crs/routes/routes.dart';
+import 'package:crs/services/hive.service.dart';
 import 'package:crs/services/location.service.dart';
 import 'package:crs/services/network.service.dart';
+import 'package:crs/utils/constants.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
@@ -9,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class DiscoverController extends GetxController {
+  final HiveService hiveService = Get.find();
   final NetworkService networkService = Get.find();
   final LocationService locationService = Get.find();
 
@@ -24,6 +28,11 @@ class DiscoverController extends GetxController {
   void onInit() {
     getLocation();
     super.onInit();
+  }
+
+  void viewDetails(Vehicle vehicle) {
+    hiveService.set(Constants.VEHICLE, vehicle);
+    Get.toNamed(Routes.DETAILS);
   }
 
   void getLocation() async {
