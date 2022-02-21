@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:crs/components/snackbars.dart';
+import 'package:crs/models/vehicle.model.dart';
 import 'package:crs/services/location.service.dart';
 import 'package:crs/services/network.service.dart';
 import 'package:custom_info_window/custom_info_window.dart';
@@ -17,7 +18,7 @@ class DiscoverController extends GetxController {
 
   Rxn<Position> current = Rxn();
   Rxn<BitmapDescriptor> icon = Rxn();
-  RxList<LatLng> available = <LatLng>[].obs;
+  RxList<Vehicle> available = <Vehicle>[].obs;
   Rxn<GoogleMapController> mapController = Rxn();
 
   @override
@@ -33,7 +34,6 @@ class DiscoverController extends GetxController {
     );
     current.value = await locationService.getCurrentLocation();
     getVehicles();
-    getCords();
   }
 
   void mapCreated(GoogleMapController controller) {
@@ -42,13 +42,6 @@ class DiscoverController extends GetxController {
       '[{"featureType": "poi","stylers": [{"visibility": "off"}]}]',
     );
     windowController.googleMapController = controller;
-  }
-
-  void getCords() {
-    for (int i = 0; i <= 5; i++) {
-      var random = getRandom();
-      available.add(random);
-    }
   }
 
   LatLng getRandom() {

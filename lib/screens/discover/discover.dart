@@ -30,12 +30,15 @@ class Discover extends GetView<DiscoverController> {
 
         markers.addAll(
           controller.available.map((e) {
+            var lat = e.location.coordinates.last;
+            var lng = e.location.coordinates.first;
+            var position = LatLng(lat, lng);
             return Marker(
-              position: e,
+              position: position,
               icon: controller.icon.value!,
               markerId: MarkerId(e.toString()),
               onTap: () {
-                windowController.addInfoWindow!(window(), e);
+                windowController.addInfoWindow!(window(), position);
               },
             );
           }),

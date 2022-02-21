@@ -24,6 +24,7 @@ class VehicleAdapter extends TypeAdapter<Vehicle> {
       plate: fields[3] as String,
       color: fields[4] as String,
       images: (fields[8] as List).cast<String>(),
+      location: fields[9] as Location,
       available: fields[7] as bool,
       description: fields[5] as String,
     );
@@ -32,7 +33,7 @@ class VehicleAdapter extends TypeAdapter<Vehicle> {
   @override
   void write(BinaryWriter writer, Vehicle obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -50,7 +51,9 @@ class VehicleAdapter extends TypeAdapter<Vehicle> {
       ..writeByte(7)
       ..write(obj.available)
       ..writeByte(8)
-      ..write(obj.images);
+      ..write(obj.images)
+      ..writeByte(9)
+      ..write(obj.location);
   }
 
   @override
@@ -77,6 +80,7 @@ Vehicle _$VehicleFromJson(Map<String, dynamic> json) => Vehicle(
       color: json['color'] as String,
       images:
           (json['images'] as List<dynamic>).map((e) => e as String).toList(),
+      location: Location.fromJson(json['location']),
       available: json['available'] as bool,
       description: json['description'] as String,
     );
@@ -91,4 +95,5 @@ Map<String, dynamic> _$VehicleToJson(Vehicle instance) => <String, dynamic>{
       'user': instance.user,
       'available': instance.available,
       'images': instance.images,
+      'location': instance.location,
     };

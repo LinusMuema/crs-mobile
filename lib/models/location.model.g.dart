@@ -16,7 +16,7 @@ class LocationAdapter extends TypeAdapter<Location> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Location(coordinates: []);
+    return Location();
   }
 
   @override
