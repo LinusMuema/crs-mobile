@@ -1,9 +1,13 @@
 import 'package:crs/components/snackbars.dart';
 import 'package:crs/models/vehicle.model.dart';
+import 'package:crs/routes/routes.dart';
+import 'package:crs/services/hive.service.dart';
 import 'package:crs/services/network.service.dart';
+import 'package:crs/utils/constants.dart';
 import 'package:get/get.dart';
 
 class GarageController extends GetxController {
+  final HiveService hiveService = Get.find();
   final NetworkService networkService = Get.find();
 
   RxBool loading = false.obs;
@@ -31,4 +35,9 @@ class GarageController extends GetxController {
   }
 
   void addVehicle(Vehicle item) => vehicles.add(item);
+
+  void viewDetails(Vehicle vehicle) {
+    hiveService.set(Constants.VEHICLE, vehicle);
+    Get.toNamed(Routes.DETAILS);
+  }
 }
