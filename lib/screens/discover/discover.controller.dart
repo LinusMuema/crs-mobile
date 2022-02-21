@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:crs/components/snackbars.dart';
 import 'package:crs/services/location.service.dart';
 import 'package:crs/services/network.service.dart';
 import 'package:custom_info_window/custom_info_window.dart';
@@ -31,6 +32,7 @@ class DiscoverController extends GetxController {
       'assets/images/car-icon.png',
     );
     current.value = await locationService.getCurrentLocation();
+    getVehicles();
     getCords();
   }
 
@@ -46,7 +48,6 @@ class DiscoverController extends GetxController {
     for (int i = 0; i <= 5; i++) {
       var random = getRandom();
       available.add(random);
-      print("random is $random");
     }
   }
 
@@ -66,5 +67,21 @@ class DiscoverController extends GetxController {
   void dispose() {
     windowController.dispose();
     super.dispose();
+  }
+
+  void getVehicles() async {
+    String endpoint = 'api/vehicles/nearby';
+
+    double currentLat = current.value!.latitude;
+    double currentLng = current.value!.longitude;
+    dynamic data = {'lat': currentLat, 'lng': currentLng};
+
+    Response response = await networkService.post(endpoint, data);
+    if (response.isOk) {
+      print(response.body);
+    } else {
+      String message = response.body['message'];
+      snackBar('Error', message);
+    }
   }
 }

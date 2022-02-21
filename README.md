@@ -13,6 +13,12 @@ These are classes that are available everywhere in the application. They are cre
 * **[HiveService]():** this class is used to access Hive's capabilities. It has two methods for reading and writing to Hive. It also registers adapters for our custom classes.
 *
 
+### Environment
+The application uses cloudinary and Google maps so you know there are API keys involved. In as much as I'm a generous person, there are some API keys I can't share. Get your own because these strings cost money lol 😂.
+* **Google maps**: Set the Google maps API key in the `google.maps.key` field in the local.properties file.
+* **Cloudinary**: Then create a `secrets.dart` file and add an abstract class of the same name in the file. Add the cloudinary api key in the `CLOUDINARY_API` variable and the api secret in the `CLOUDINARY_SECRET` variable.
+
+With those two, you are good to go.
 
 ### Themes
 Colors:   
