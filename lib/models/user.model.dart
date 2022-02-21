@@ -1,3 +1,4 @@
+import 'package:crs/models/location.model.dart';
 import 'package:crs/utils/constants.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -23,11 +24,15 @@ class User {
   @HiveField(4)
   String email;
 
+  @HiveField(5)
+  Location location;
+
   User({
     required this.id,
     required this.email,
     required this.phone,
     required this.avatar,
+    required this.location,
     required this.username,
   });
 

@@ -1,3 +1,4 @@
+import 'package:crs/models/location.model.dart';
 import 'package:crs/models/user.model.dart';
 import 'package:crs/models/vehicle.model.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,7 @@ class HiveService extends GetxService {
     // register adapters
     Hive.registerAdapter(UserAdapter());
     Hive.registerAdapter(VehicleAdapter());
+    Hive.registerAdapter(LocationAdapter());
 
     // Initialise hive and open box
     await Hive.initFlutter();
