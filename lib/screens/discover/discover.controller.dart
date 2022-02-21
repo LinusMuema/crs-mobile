@@ -73,6 +73,7 @@ class DiscoverController extends GetxController {
     if (response.isOk) {
       print(response.body);
     } else {
+      print(response.statusCode);
       String message = response.body['message'];
       snackBar('Error', message);
     }

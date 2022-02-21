@@ -30,8 +30,8 @@ class Discover extends GetView<DiscoverController> {
 
         markers.addAll(
           controller.available.map((e) {
-            var lat = e.location.coordinates.last;
-            var lng = e.location.coordinates.first;
+            var lat = e.user.location.coordinates.last;
+            var lng = e.user.location.coordinates.first;
             var position = LatLng(lat, lng);
             return Marker(
               position: position,

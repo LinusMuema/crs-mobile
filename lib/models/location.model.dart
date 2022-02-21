@@ -9,7 +9,9 @@ part 'location.model.g.dart';
 class Location extends HiveObject {
   List<double> coordinates;
 
-  Location({required this.coordinates});
+  Location({
+    required this.coordinates,
+  });
 
   factory Location.fromJson(json) => _$LocationFromJson(json);
   Map<String, dynamic> toJson() => _$LocationToJson(this);
