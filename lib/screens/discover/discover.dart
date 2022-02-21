@@ -16,7 +16,6 @@ class Discover extends GetView<DiscoverController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      print("something has changed");
       var markers = <Marker>{};
       var target = const LatLng(0.0, 0.0);
       var position = CameraPosition(target: target, zoom: 14);
@@ -75,9 +74,10 @@ class Discover extends GetView<DiscoverController> {
             DraggableScrollableSheet(
               minChildSize: .4,
               initialChildSize: .4,
-              builder: (context, controller) {
+              builder: (context, ctrl) {
                 return SingleChildScrollView(
-                  controller: controller,
+                  physics: const BouncingScrollPhysics(),
+                  controller: ctrl,
                   child: Card(
                     elevation: 10,
                     margin: EdgeInsets.zero,
@@ -99,7 +99,17 @@ class Discover extends GetView<DiscoverController> {
                         ),
                         verticalSpaceTiny,
                         Text('Available vehicles', style: heading1),
-                        Container(height: Get.height)
+                        verticalSpaceSmall,
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: controller.filtered.length,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            var vehicle = controller.filtered[index];
+                            return card(vehicle);
+                          },
+                        ),
+                        verticalSpaceMassive,
                       ],
                     ),
                   ),
@@ -156,6 +166,22 @@ class Discover extends GetView<DiscoverController> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget card(Vehicle vehicle) {
+    return Card(
+      child: Row(
+        children: [
+          CachedNetworkImage(
+            fit: BoxFit.cover,
+            width: Get.width * .3,
+            height: Get.width * .3,
+            imageUrl: vehicle.images.first,
+            placeholder: (c, i) => pulse(color: black),
+          ),
+        ],
       ),
     );
   }

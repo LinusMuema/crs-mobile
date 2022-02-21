@@ -17,6 +17,7 @@ class NetworkService extends GetConnect {
     final token = hiveService.get(Constants.TOKEN);
 
     httpClient.baseUrl = Constants.BASE_URL;
+    httpClient.timeout = const Duration(seconds: 30);
     httpClient.addRequestModifier((Request request) {
       request.headers["Authorization"] = "Bearer $token";
       return request;
