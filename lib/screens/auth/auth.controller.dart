@@ -3,6 +3,7 @@ import 'package:crs/models/user.model.dart';
 import 'package:crs/routes/routes.dart';
 import 'package:crs/screens/auth/widgets/login.widget.dart';
 import 'package:crs/screens/auth/widgets/signup.widget.dart';
+import 'package:crs/services/background.service.dart';
 import 'package:crs/services/hive.service.dart';
 import 'package:crs/services/network.service.dart';
 import 'package:crs/utils/constants.dart';
@@ -13,6 +14,7 @@ import 'package:get/get.dart';
 class AuthController extends GetxController {
   final HiveService hiveService = Get.find();
   final NetworkService networkService = Get.find();
+  final BackgroundService backgroundService = Get.find();
 
   final GlobalKey<FormBuilderState> loginKey = GlobalKey();
   final GlobalKey<FormBuilderState> signupKey = GlobalKey();
@@ -39,7 +41,6 @@ class AuthController extends GetxController {
         // save the web token
         String token = response.body['token'];
         hiveService.set(Constants.TOKEN, token);
-        networkService.setToken();
 
         // save the user profile
         User user = User.fromJson(response.body['user']);
@@ -47,6 +48,7 @@ class AuthController extends GetxController {
 
         // navigate to home
         Get.offAllNamed(Routes.NAV);
+        updateServices();
       } else {
         String message = response.body['message'];
         snackBar('Error', message);
@@ -73,7 +75,6 @@ class AuthController extends GetxController {
         // save the web token
         String token = response.body['token'];
         hiveService.set(Constants.TOKEN, token);
-        networkService.setToken();
 
         // save the user profile
         User user = User.fromJson(response.body['user']);
@@ -81,6 +82,7 @@ class AuthController extends GetxController {
 
         // navigate to home
         Get.offAllNamed(Routes.NAV);
+        updateServices();
       } else {
         String message = response.body['message'].toString();
 
@@ -90,5 +92,10 @@ class AuthController extends GetxController {
         snackBar('Error', message);
       }
     }
+  }
+
+  void updateServices() {
+    networkService.setToken();
+    backgroundService.observeLocation();
   }
 }

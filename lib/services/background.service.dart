@@ -12,8 +12,11 @@ class BackgroundService extends GetxService {
 
   Future<BackgroundService> init() async {
     BackgroundLocation.startLocationService();
-    BackgroundLocation.getLocationUpdates(updateLocation);
     return this;
+  }
+
+  void observeLocation() {
+    BackgroundLocation.getLocationUpdates(updateLocation);
   }
 
   void updateLocation(Location location) async {
@@ -29,5 +32,7 @@ class BackgroundService extends GetxService {
     // push to server
     String endpoint = 'api/users/';
     await networkService.put(endpoint, user);
+
+    // TODO: check if there's a request ongoing and update it's location too
   }
 }
