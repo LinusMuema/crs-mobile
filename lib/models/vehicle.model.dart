@@ -1,5 +1,6 @@
 import 'package:crs/models/user.model.dart';
 import 'package:crs/utils/constants.dart';
+import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -52,6 +53,7 @@ class Vehicle extends HiveObject {
     required this.description,
   });
 
+  String? getName() => '$model $make'.capitalize;
   factory Vehicle.fromJson(json) => _$VehicleFromJson(json);
   Map<String, dynamic> toJson() => _$VehicleToJson(this);
 }

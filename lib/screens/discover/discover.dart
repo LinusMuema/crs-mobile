@@ -102,6 +102,7 @@ class Discover extends GetView<DiscoverController> {
                         verticalSpaceSmall,
                         ListView.builder(
                           shrinkWrap: true,
+                          padding: EdgeInsets.zero,
                           itemCount: controller.filtered.length,
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
@@ -123,64 +124,101 @@ class Discover extends GetView<DiscoverController> {
   }
 
   Widget window(Vehicle vehicle) {
-    var name = '${vehicle.model} ${vehicle.make}'.capitalize;
     const radius = BorderRadius.vertical(top: Radius.circular(15));
     const shape = RoundedRectangleBorder(borderRadius: regularRadius);
 
-    return Card(
-      elevation: 10,
-      shape: shape,
-      child: InkWell(
-        onTap: () {},
-        child: Column(
-          children: [
-            ClipRRect(
-              borderRadius: radius,
-              child: CachedNetworkImage(
-                fit: BoxFit.cover,
-                width: Get.width * .6,
-                height: Get.width * .3,
-                imageUrl: vehicle.images.first,
-                placeholder: (c, i) => pulse(color: black),
+    return GestureDetector(
+      child: Card(
+        elevation: 10,
+        shape: shape,
+        child: InkWell(
+          onTap: () {},
+          child: Column(
+            children: [
+              ClipRRect(
+                borderRadius: radius,
+                child: CachedNetworkImage(
+                  fit: BoxFit.cover,
+                  width: Get.width * .6,
+                  height: Get.width * .3,
+                  imageUrl: vehicle.images.first,
+                  placeholder: (c, i) => pulse(color: black),
+                ),
               ),
-            ),
-            verticalSpaceTiny,
-            Padding(
-              padding: regularHInsets,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(name!, style: heading1),
-                      Text('Ksh. ${vehicle.rate}/hr', style: heading4)
-                    ],
-                  ),
-                  verticalSpaceTiny,
-                  Text('Available from:', style: body1),
-                  Text('8:00 am to 7:00 pm', style: body1),
-                  verticalSpaceTiny,
-                ],
+              verticalSpaceTiny,
+              Padding(
+                padding: regularHInsets,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(vehicle.getName()!, style: heading1),
+                        Text('Ksh. ${vehicle.rate}/hr', style: heading4)
+                      ],
+                    ),
+                    verticalSpaceTiny,
+                    Text('Available from:', style: body1),
+                    Text('8:00 am to 7:00 pm', style: body1),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget card(Vehicle vehicle) {
-    return Card(
+    return Padding(
+      padding: regularInsets,
       child: Row(
         children: [
-          CachedNetworkImage(
-            fit: BoxFit.cover,
-            width: Get.width * .3,
-            height: Get.width * .3,
-            imageUrl: vehicle.images.first,
-            placeholder: (c, i) => pulse(color: black),
+          Material(
+            elevation: 8,
+            shadowColor: grey,
+            borderRadius: BorderRadius.circular(20),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: CachedNetworkImage(
+                fit: BoxFit.cover,
+                width: Get.width * .25,
+                height: Get.width * .25,
+                imageUrl: vehicle.images.first,
+                placeholder: (c, i) => pulse(color: black),
+              ),
+            ),
           ),
+          horizontalSpaceSmall,
+          Expanded(
+            child: SizedBox(
+              height: Get.width * .2,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(vehicle.getName()!, style: heading1),
+                      Text(vehicle.user.phone, style: body1),
+                    ],
+                  ),
+                  verticalSpaceTiny,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Available from:', style: body1),
+                      Text('8:00 am To 5:00 am', style: body1),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+          Text('Ksh ${vehicle.rate}/hr', style: body4)
         ],
       ),
     );
