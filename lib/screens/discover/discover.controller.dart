@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:crs/components/snackbars.dart';
 import 'package:crs/models/vehicle.model.dart';
 import 'package:crs/services/location.service.dart';
@@ -16,9 +14,10 @@ class DiscoverController extends GetxController {
 
   CustomInfoWindowController windowController = CustomInfoWindowController();
 
+  List<Vehicle> available = [];
   Rxn<Position> current = Rxn();
   Rxn<BitmapDescriptor> icon = Rxn();
-  RxList<Vehicle> available = <Vehicle>[].obs;
+  RxList<Vehicle> filtered = <Vehicle>[].obs;
   Rxn<GoogleMapController> mapController = Rxn();
 
   @override
@@ -44,24 +43,6 @@ class DiscoverController extends GetxController {
     windowController.googleMapController = controller;
   }
 
-  LatLng getRandom() {
-    final random = Random();
-    double currentLat = current.value!.latitude;
-    double currentLng = current.value!.longitude;
-
-    double nextDouble(min, max) => min + random.nextDouble() * (max - min);
-
-    double lat = nextDouble((currentLat - .01), (currentLat + .01));
-    double lng = nextDouble((currentLng - .01), (currentLng + .01));
-    return LatLng(lat, lng);
-  }
-
-  @override
-  void dispose() {
-    windowController.dispose();
-    super.dispose();
-  }
-
   void getVehicles() async {
     String endpoint = 'api/vehicles/nearby';
 
@@ -71,11 +52,19 @@ class DiscoverController extends GetxController {
 
     Response response = await networkService.post(endpoint, data);
     if (response.isOk) {
-      print(response.body);
+      var items = response.body as List;
+      print("items are $items");
+      available = items.map((e) => Vehicle.fromJson(e)).toList();
+      filtered.value = available;
     } else {
-      print(response.statusCode);
       String message = response.body['message'];
       snackBar('Error', message);
     }
+  }
+
+  @override
+  void dispose() {
+    windowController.dispose();
+    super.dispose();
   }
 }

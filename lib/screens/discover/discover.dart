@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crs/components/loaders.dart';
+import 'package:crs/models/vehicle.model.dart';
 import 'package:crs/screens/discover/discover.controller.dart';
 import 'package:crs/theme/colors.dart';
 import 'package:crs/theme/dimens.dart';
@@ -15,6 +16,7 @@ class Discover extends GetView<DiscoverController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
+      print("something has changed");
       var markers = <Marker>{};
       var target = const LatLng(0.0, 0.0);
       var position = CameraPosition(target: target, zoom: 14);
@@ -29,7 +31,7 @@ class Discover extends GetView<DiscoverController> {
         mapController.animateCamera(CameraUpdate.newCameraPosition(position));
 
         markers.addAll(
-          controller.available.map((e) {
+          controller.filtered.map((e) {
             var lat = e.user.location.coordinates.last;
             var lng = e.user.location.coordinates.first;
             var position = LatLng(lat, lng);
@@ -38,7 +40,7 @@ class Discover extends GetView<DiscoverController> {
               icon: controller.icon.value!,
               markerId: MarkerId(e.toString()),
               onTap: () {
-                windowController.addInfoWindow!(window(), position);
+                windowController.addInfoWindow!(window(e), position);
               },
             );
           }),
@@ -110,7 +112,8 @@ class Discover extends GetView<DiscoverController> {
     });
   }
 
-  Widget window() {
+  Widget window(Vehicle vehicle) {
+    var name = '${vehicle.model} ${vehicle.make}'.capitalize;
     const radius = BorderRadius.vertical(top: Radius.circular(15));
     const shape = RoundedRectangleBorder(borderRadius: regularRadius);
 
@@ -124,12 +127,12 @@ class Discover extends GetView<DiscoverController> {
             ClipRRect(
               borderRadius: radius,
               child: CachedNetworkImage(
-                  fit: BoxFit.cover,
-                  width: Get.width * .6,
-                  height: Get.width * .3,
-                  placeholder: (c, i) => pulse(color: black),
-                  imageUrl:
-                      'https://images.pexels.com/photos/35619/capri-ford-oldtimer-automotive.jpg?cs=srgb&dl=pexels-pixabay-35619.jpg&fm=jpg'),
+                fit: BoxFit.cover,
+                width: Get.width * .6,
+                height: Get.width * .3,
+                imageUrl: vehicle.images.first,
+                placeholder: (c, i) => pulse(color: black),
+              ),
             ),
             verticalSpaceTiny,
             Padding(
@@ -140,8 +143,8 @@ class Discover extends GetView<DiscoverController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Nissan note', style: heading1),
-                      Text('Ksh. 500/hr', style: heading4)
+                      Text(name!, style: heading1),
+                      Text('Ksh. ${vehicle.rate}/hr', style: heading4)
                     ],
                   ),
                   verticalSpaceTiny,

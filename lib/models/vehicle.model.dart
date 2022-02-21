@@ -1,4 +1,3 @@
-import 'package:crs/models/location.model.dart';
 import 'package:crs/models/user.model.dart';
 import 'package:crs/utils/constants.dart';
 import 'package:hive/hive.dart';
@@ -37,10 +36,14 @@ class Vehicle extends HiveObject {
   @HiveField(8)
   List<String> images;
 
+  @HiveField(9)
+  double rate;
+
   Vehicle({
     required this.id,
     required this.make,
     required this.user,
+    required this.rate,
     required this.model,
     required this.plate,
     required this.color,
