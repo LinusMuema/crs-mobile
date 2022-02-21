@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crs/components/loaders.dart';
+import 'package:crs/models/vehicle.model.dart';
 import 'package:crs/screens/discover/discover.controller.dart';
 import 'package:crs/theme/colors.dart';
 import 'package:crs/theme/dimens.dart';
@@ -29,7 +30,7 @@ class Discover extends GetView<DiscoverController> {
         mapController.animateCamera(CameraUpdate.newCameraPosition(position));
 
         markers.addAll(
-          controller.available.map((e) {
+          controller.filtered.map((e) {
             var lat = e.user.location.coordinates.last;
             var lng = e.user.location.coordinates.first;
             var position = LatLng(lat, lng);
@@ -38,7 +39,7 @@ class Discover extends GetView<DiscoverController> {
               icon: controller.icon.value!,
               markerId: MarkerId(e.toString()),
               onTap: () {
-                windowController.addInfoWindow!(window(), position);
+                windowController.addInfoWindow!(window(e), position);
               },
             );
           }),
@@ -73,9 +74,10 @@ class Discover extends GetView<DiscoverController> {
             DraggableScrollableSheet(
               minChildSize: .4,
               initialChildSize: .4,
-              builder: (context, controller) {
+              builder: (context, ctrl) {
                 return SingleChildScrollView(
-                  controller: controller,
+                  physics: const BouncingScrollPhysics(),
+                  controller: ctrl,
                   child: Card(
                     elevation: 10,
                     margin: EdgeInsets.zero,
@@ -97,7 +99,18 @@ class Discover extends GetView<DiscoverController> {
                         ),
                         verticalSpaceTiny,
                         Text('Available vehicles', style: heading1),
-                        Container(height: Get.height)
+                        verticalSpaceSmall,
+                        ListView.builder(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          itemCount: controller.filtered.length,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            var vehicle = controller.filtered[index];
+                            return card(vehicle);
+                          },
+                        ),
+                        verticalSpaceMassive,
                       ],
                     ),
                   ),
@@ -110,7 +123,7 @@ class Discover extends GetView<DiscoverController> {
     });
   }
 
-  Widget window() {
+  Widget window(Vehicle vehicle) {
     const radius = BorderRadius.vertical(top: Radius.circular(15));
     const shape = RoundedRectangleBorder(borderRadius: regularRadius);
 
@@ -118,18 +131,18 @@ class Discover extends GetView<DiscoverController> {
       elevation: 10,
       shape: shape,
       child: InkWell(
-        onTap: () {},
+        onTap: () => controller.viewDetails(vehicle),
         child: Column(
           children: [
             ClipRRect(
               borderRadius: radius,
               child: CachedNetworkImage(
-                  fit: BoxFit.cover,
-                  width: Get.width * .6,
-                  height: Get.width * .3,
-                  placeholder: (c, i) => pulse(color: black),
-                  imageUrl:
-                      'https://images.pexels.com/photos/35619/capri-ford-oldtimer-automotive.jpg?cs=srgb&dl=pexels-pixabay-35619.jpg&fm=jpg'),
+                fit: BoxFit.cover,
+                width: Get.width * .6,
+                height: Get.width * .3,
+                imageUrl: vehicle.images.first,
+                placeholder: (c, i) => pulse(color: black),
+              ),
             ),
             verticalSpaceTiny,
             Padding(
@@ -140,17 +153,72 @@ class Discover extends GetView<DiscoverController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Nissan note', style: heading1),
-                      Text('Ksh. 500/hr', style: heading4)
+                      Text(vehicle.getName()!, style: heading1),
+                      Text('Ksh. ${vehicle.rate}/hr', style: heading4)
                     ],
                   ),
                   verticalSpaceTiny,
                   Text('Available from:', style: body1),
                   Text('8:00 am to 7:00 pm', style: body1),
-                  verticalSpaceTiny,
                 ],
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget card(Vehicle vehicle) {
+    return InkWell(
+      onTap: () => controller.viewDetails(vehicle),
+      child: Padding(
+        padding: regularInsets,
+        child: Row(
+          children: [
+            Material(
+              elevation: 8,
+              shadowColor: grey,
+              borderRadius: BorderRadius.circular(20),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: CachedNetworkImage(
+                  fit: BoxFit.cover,
+                  width: Get.width * .25,
+                  height: Get.width * .25,
+                  imageUrl: vehicle.images.first,
+                  placeholder: (c, i) => pulse(color: black),
+                ),
+              ),
+            ),
+            horizontalSpaceSmall,
+            Expanded(
+              child: SizedBox(
+                height: Get.width * .2,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(vehicle.getName()!, style: heading1),
+                        Text(vehicle.user.phone, style: body1),
+                      ],
+                    ),
+                    verticalSpaceTiny,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Available from:', style: body1),
+                        Text('8:00 am To 5:00 am', style: body1),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Text('Ksh ${vehicle.rate}/hr', style: body4)
           ],
         ),
       ),

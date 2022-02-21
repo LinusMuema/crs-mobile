@@ -3,4 +3,5 @@ abstract class Routes {
   static const NAV = '/nav';
   static const AUTH = '/auth';
   static const VEHICLE = '/vehicle';
+  static const DETAILS = '/details';
 }

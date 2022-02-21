@@ -52,36 +52,39 @@ class Garage extends GetView<GarageController> {
     const radius = BorderRadius.vertical(top: Radius.circular(15));
     const shape = RoundedRectangleBorder(borderRadius: regularRadius);
     var name = '${vehicle.make.capitalize} ${vehicle.model.toLowerCase()}';
-    return Container(
-      width: Get.width,
-      margin: regularVInsets,
-      child: Card(
-        elevation: 5,
-        shape: shape,
-        child: Column(
-          children: [
-            ClipRRect(
-              borderRadius: radius,
-              child: CachedNetworkImage(
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: Get.height * .2,
-                imageUrl: vehicle.images.first,
-                placeholder: (c, i) => pulse(color: black),
+    return InkWell(
+      onTap: () => controller.viewDetails(vehicle),
+      child: Container(
+        width: Get.width,
+        margin: regularVInsets,
+        child: Card(
+          elevation: 5,
+          shape: shape,
+          child: Column(
+            children: [
+              ClipRRect(
+                borderRadius: radius,
+                child: CachedNetworkImage(
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: Get.height * .2,
+                  imageUrl: vehicle.images.first,
+                  placeholder: (c, i) => pulse(color: black),
+                ),
               ),
-            ),
-            verticalSpaceTiny,
-            Padding(
-              padding: smallInsets,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(name, style: heading1),
-                ],
-              ),
-            )
-          ],
+              verticalSpaceTiny,
+              Padding(
+                padding: smallInsets,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(name, style: heading1),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

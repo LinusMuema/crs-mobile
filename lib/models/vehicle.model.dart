@@ -1,6 +1,6 @@
-import 'package:crs/models/location.model.dart';
 import 'package:crs/models/user.model.dart';
 import 'package:crs/utils/constants.dart';
+import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -37,10 +37,14 @@ class Vehicle extends HiveObject {
   @HiveField(8)
   List<String> images;
 
+  @HiveField(9)
+  double rate;
+
   Vehicle({
     required this.id,
     required this.make,
     required this.user,
+    required this.rate,
     required this.model,
     required this.plate,
     required this.color,
@@ -49,6 +53,7 @@ class Vehicle extends HiveObject {
     required this.description,
   });
 
+  String? getName() => '$model $make'.capitalize;
   factory Vehicle.fromJson(json) => _$VehicleFromJson(json);
   Map<String, dynamic> toJson() => _$VehicleToJson(this);
 }

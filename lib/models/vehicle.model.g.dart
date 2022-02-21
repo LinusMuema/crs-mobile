@@ -20,6 +20,7 @@ class VehicleAdapter extends TypeAdapter<Vehicle> {
       id: fields[0] as String,
       make: fields[1] as String,
       user: fields[6] as User,
+      rate: fields[9] as double,
       model: fields[2] as String,
       plate: fields[3] as String,
       color: fields[4] as String,
@@ -32,7 +33,7 @@ class VehicleAdapter extends TypeAdapter<Vehicle> {
   @override
   void write(BinaryWriter writer, Vehicle obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -50,7 +51,9 @@ class VehicleAdapter extends TypeAdapter<Vehicle> {
       ..writeByte(7)
       ..write(obj.available)
       ..writeByte(8)
-      ..write(obj.images);
+      ..write(obj.images)
+      ..writeByte(9)
+      ..write(obj.rate);
   }
 
   @override
@@ -72,6 +75,7 @@ Vehicle _$VehicleFromJson(Map<String, dynamic> json) => Vehicle(
       id: json['_id'] as String,
       make: json['make'] as String,
       user: User.fromJson(json['user']),
+      rate: (json['rate'] as num).toDouble(),
       model: json['model'] as String,
       plate: json['plate'] as String,
       color: json['color'] as String,
@@ -91,4 +95,5 @@ Map<String, dynamic> _$VehicleToJson(Vehicle instance) => <String, dynamic>{
       'user': instance.user,
       'available': instance.available,
       'images': instance.images,
+      'rate': instance.rate,
     };
