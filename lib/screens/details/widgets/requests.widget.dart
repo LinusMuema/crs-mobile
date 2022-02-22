@@ -66,7 +66,7 @@ class Requests extends GetWidget<DetailsController> {
                             Text(
                               request.message,
                               style: caption1.copyWith(
-                                  fontStyle: FontStyle.italic),
+                                  fontStyle: FontStyle.italic,),
                             )
                           ],
                         ),
