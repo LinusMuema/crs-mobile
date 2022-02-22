@@ -1,4 +1,5 @@
 import 'package:crs/models/location.model.dart';
+import 'package:crs/models/request.model.dart';
 import 'package:crs/models/user.model.dart';
 import 'package:crs/models/vehicle.model.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,7 @@ class HiveService extends GetxService {
   Future<HiveService> init() async {
     // register adapters
     Hive.registerAdapter(UserAdapter());
+    Hive.registerAdapter(RequestAdapter());
     Hive.registerAdapter(VehicleAdapter());
     Hive.registerAdapter(LocationAdapter());
 
