@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:crs/components/snackbars.dart';
 import 'package:crs/models/user.model.dart';
@@ -26,9 +25,9 @@ class VehicleController extends GetxController {
 
   Rxn<User> user = Rxn();
   RxBool loading = false.obs;
+  Rxn<Vehicle> vehicle = Rxn();
   RxList<String> urls = <String>[].obs;
   RxList<bool> uploading = <bool>[].obs;
-  RxList<Uint8List> images = <Uint8List>[].obs;
 
   List<String> makes = [
     'Toyota',
@@ -45,12 +44,25 @@ class VehicleController extends GetxController {
 
   @override
   void onInit() {
-    user.value = hiveService.get(Constants.USER);
+    getData();
     super.onInit();
   }
 
+  void getData() {
+    user.value = hiveService.get(Constants.USER);
+
+    var args = Get.arguments;
+    if (args != null) {
+      vehicle.value = Get.arguments['vehicle'];
+      textController.text = vehicle.value!.make;
+
+      urls.addAll(vehicle.value!.images);
+      uploading.addAll(vehicle.value!.images.map((e) => false).toList());
+    }
+  }
+
   void pickImage() async {
-    if (images.length == 3) {
+    if (urls.length == 3) {
       snackBar('Limit', 'You cannot upload more than three images');
       return;
     }
@@ -65,23 +77,24 @@ class VehicleController extends GetxController {
     var name = short.generate();
     var path = '/crs/vehicles/${user.value!.email}';
 
-    images.add(image);
+    urls.add('');
     uploading.add(true);
 
+    var index = uploading.length - 1;
     var response = await cloudinaryService.uploadImage(image, path, name);
 
-    urls.add(response.secureUrl!);
-    uploading[uploading.length - 1] = false;
+    uploading[index] = false;
+    urls[index] = response.secureUrl!;
   }
 
   void removeImage(int index) async {
     Get.back();
 
-    images.removeAt(index);
-    uploading.removeAt(index);
+    uploading[index] = true;
 
     await cloudinaryService.deleteImage(urls[index]);
     urls.removeAt(index);
+    uploading.removeAt(index);
   }
 
   Future<List<String>> getSuggestions(String pattern) async => makes
@@ -93,7 +106,7 @@ class VehicleController extends GetxController {
   void submit() async {
     if (formKey.currentState!.validate()) {
       if (urls.isEmpty) {
-        snackBar('Images', 'Upload at least one image of your vehicle');
+        snackBar('Images', 'Upload at least one image of your result');
         return;
       }
 
@@ -103,17 +116,22 @@ class VehicleController extends GetxController {
       Map<String, dynamic> data = Map.from(formData);
       data['images'] = urls;
       data['make'] = textController.text.toLowerCase();
+      if (vehicle.value != null) data['id'] = vehicle.value!.id;
 
       loading.value = true;
       String endpoint = 'api/vehicles';
-      Response response = await networkService.post(endpoint, data);
-      if (response.isOk) {
-        var vehicle = Vehicle.fromJson(response.body);
-        GarageController controller = Get.find();
-        controller.addVehicle(vehicle);
+      Response response = vehicle.value != null
+          ? await networkService.put(endpoint, data)
+          : await networkService.post(endpoint, data);
 
-        Get.back();
-        snackBar('Success', 'Your vehicle has been successfully registered');
+      if (response.isOk) {
+        var result = Vehicle.fromJson(response.body);
+
+        // update the garage
+        GarageController controller = Get.find();
+        if (vehicle.value == null) controller.addVehicle(result);
+
+        Get.back(result: result);
       } else {
         String message = response.body['message'];
         snackBar('Error', message);

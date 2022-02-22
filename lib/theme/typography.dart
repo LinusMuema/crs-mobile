@@ -13,9 +13,9 @@ TextStyle body3 = body1.copyWith(color: grey);
 TextStyle body4 = body1.copyWith(color: green);
 TextStyle body5 = body1.copyWith(color: red);
 
-TextStyle caption = body1.copyWith(fontSize: 12);
-TextStyle caption1 = caption.copyWith(color: white);
-TextStyle caption2 = caption.copyWith(color: grey);
+TextStyle caption1 = body1.copyWith(fontSize: 12);
+TextStyle caption2 = caption1.copyWith(color: white);
+TextStyle caption3 = caption1.copyWith(color: grey);
 
 TextStyle heading1 = GoogleFonts.nunito(textStyle: textTheme.headline4);
 TextStyle heading2 = heading1.copyWith(color: white);
