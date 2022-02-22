@@ -51,13 +51,12 @@ ThemeData lightTheme() {
   );
 
   ColorScheme colorScheme = ColorScheme.fromSwatch().copyWith(
-    primary: white,
+    error: red,
+    primary: black,
     onSurface: black,
   );
 
   return base.copyWith(
-    errorColor: red,
-    primaryColor: white,
     colorScheme: colorScheme,
     floatingActionButtonTheme: fabTheme,
     textTheme: textTheme(base.textTheme),
