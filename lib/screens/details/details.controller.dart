@@ -22,7 +22,9 @@ class DetailsController extends GetxController {
     super.onInit();
   }
 
-  void editVehicle() {
-    Get.toNamed(Routes.VEHICLE);
+  void editVehicle() async {
+    dynamic args = {'vehicle': vehicle.value};
+    var result = await Get.toNamed(Routes.VEHICLE, arguments: args);
+    vehicle.value = result;
   }
 }
