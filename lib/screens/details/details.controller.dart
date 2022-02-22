@@ -25,6 +25,6 @@ class DetailsController extends GetxController {
   void editVehicle() async {
     dynamic args = {'vehicle': vehicle.value};
     var result = await Get.toNamed(Routes.VEHICLE, arguments: args);
-    vehicle.value = result;
+    if (result != null) vehicle.value = result;
   }
 }
