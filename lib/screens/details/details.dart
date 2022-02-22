@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:crs/components/dilaog.dart';
 import 'package:crs/components/loaders.dart';
 import 'package:crs/screens/details/details.controller.dart';
+import 'package:crs/screens/details/widgets/requests.widget.dart';
 import 'package:crs/theme/colors.dart';
 import 'package:crs/theme/dimens.dart';
 import 'package:crs/theme/typography.dart';
@@ -115,6 +116,8 @@ class Details extends GetView<DetailsController> {
                                 : Container(),
                             verticalSpaceSmall,
                             Text(vehicle.description, style: body1),
+                            verticalSpaceSmall,
+                            owned ? const Requests() : Container(),
                             verticalSpaceLarge,
                           ],
                         ),
@@ -126,34 +129,26 @@ class Details extends GetView<DetailsController> {
             ),
             !owned
                 ? controller.request.value == null
-                    ? Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Padding(
-                          padding: smallInsets,
-                          child: ElevatedButton(
-                            onPressed: () => fadeInDialog(dialog()),
-                            child: Text('request', style: body2),
-                          ),
-                        ),
-                      )
+                    ? button('request')
                     : Container()
-                : Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: smallInsets,
-                      child: ElevatedButton(
-                        onPressed: () => fadeInDialog(dialog()),
-                        child: Text(
-                          vehicle.available ? 'unlist vehicle' : 'list vehicle',
-                          style: body2,
-                        ),
-                      ),
-                    ),
-                  )
+                : button(!vehicle.available ? 'list vehicle' : 'unlist vehicle')
           ],
         ),
       );
     });
+  }
+
+  Widget button(String text) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: smallInsets,
+        child: ElevatedButton(
+          onPressed: () => fadeInDialog(dialog()),
+          child: Text(text, style: body2),
+        ),
+      ),
+    );
   }
 
   Widget dialog() {
@@ -318,7 +313,7 @@ class Details extends GetView<DetailsController> {
                   focusedBorder: border,
                   errorBorder: errorBorder,
                   labelText: 'Rate per hour',
-                  prefixStyle: caption.copyWith(fontWeight: FontWeight.bold),
+                  prefixStyle: caption1.copyWith(fontWeight: FontWeight.bold),
                 ),
               ),
               verticalSpaceSmall,
@@ -336,9 +331,8 @@ class Details extends GetView<DetailsController> {
   }
 
   Widget unlistVehicle() {
-    var unlist = controller.canUnlist();
-
     return Obx(() {
+      var unlist = controller.canUnlist();
       return Container(
         width: Get.width,
         padding: regularInsets,

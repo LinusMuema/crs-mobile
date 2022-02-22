@@ -3,6 +3,7 @@ import 'package:crs/models/user.model.dart';
 import 'package:crs/models/vehicle.model.dart';
 import 'package:crs/utils/constants.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'request.model.g.dart';
@@ -40,6 +41,12 @@ class Request extends HiveObject {
     required this.vehicle,
     required this.locations,
   });
+
+  String getRange() {
+    var end = DateFormat("hh:MM a").format(to);
+    var start = DateFormat("hh:MM a").format(from);
+    return '$start to $end';
+  }
 
   factory Request.fromJson(json) => _$RequestFromJson(json);
   Map<String, dynamic> toJson() => _$RequestToJson(this);
