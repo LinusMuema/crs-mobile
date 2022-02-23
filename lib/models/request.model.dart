@@ -36,10 +36,18 @@ class Request extends HiveObject {
   @HiveField(7)
   Vehicle vehicle;
 
+  @HiveField(8)
+  DateTime start;
+
+  @HiveField(9)
+  DateTime end;
+
   Request({
     required this.id,
     required this.to,
+    required this.end,
     required this.from,
+    required this.start,
     required this.client,
     required this.status,
     required this.message,
@@ -51,6 +59,12 @@ class Request extends HiveObject {
     var end = DateFormat("hh:MM a").format(to);
     var start = DateFormat("hh:MM a").format(from);
     return '$start to $end';
+  }
+
+  String getCost() {
+    var zoneDiff = const Duration(hours: 2); // Due to mongoDB
+    var diff = start.subtract(zoneDiff).difference(DateTime.now());
+    return NumberFormat().format((diff.inHours * vehicle.rate).round());
   }
 
   factory Request.fromJson(json) => _$RequestFromJson(json);
