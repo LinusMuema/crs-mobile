@@ -34,8 +34,13 @@ class DetailsController extends GetxController {
   }
 
   bool canUnlist() {
-    var options = ['rejected', 'returned'];
+    var options = ['rejected', 'completed'];
     return requests.every((e) => options.contains(e.status));
+  }
+
+  bool canList() {
+    var options = ['accepted', 'collected'];
+    return requests.every((e) => !options.contains(e.status));
   }
 
   void editVehicle() async {
@@ -44,7 +49,7 @@ class DetailsController extends GetxController {
     if (result != null) vehicle.value = result;
   }
 
-  void getRequests() async {
+  Future<void> getRequests() async {
     String endpoint = 'api/vehicles/history';
     dynamic data = {'id': vehicle.value!.id};
 
@@ -117,6 +122,37 @@ class DetailsController extends GetxController {
 
       Get.back();
       snackBar('Success', 'Your vehicle has been unlisted');
+    } else {
+      String message = response.body['message'];
+      snackBar('Error', message);
+    }
+    loading.toggle();
+  }
+
+  void acceptRequest(Request request) async {
+    dynamic data = {
+      'available': false,
+      'status': 'accepted',
+      'request': request.id,
+    };
+    await updateRequest(data);
+  }
+
+  void declineRequest(Request request) async {
+    dynamic data = {
+      'available': true,
+      'status': 'rejected',
+      'request': request.id,
+    };
+    await updateRequest(data);
+  }
+
+  Future<void> updateRequest(dynamic data) async {
+    loading.toggle();
+    String endpoint = 'api/vehicles/request';
+    Response response = await networkService.put(endpoint, data);
+    if (response.isOk) {
+      await getRequests();
     } else {
       String message = response.body['message'];
       snackBar('Error', message);

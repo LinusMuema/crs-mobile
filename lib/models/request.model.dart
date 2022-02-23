@@ -12,27 +12,32 @@ part 'request.model.g.dart';
 @HiveType(typeId: Constants.REQUEST_TYPE)
 class Request extends HiveObject {
   @HiveField(0)
-  DateTime to;
+  @JsonKey(name: '_id')
+  String id;
 
   @HiveField(1)
-  DateTime from;
+  DateTime to;
 
   @HiveField(2)
-  List<Location> locations;
+  DateTime from;
 
   @HiveField(3)
-  String message;
+  List<Location> locations;
 
   @HiveField(4)
-  String status;
+  String message;
 
   @HiveField(5)
-  User client;
+  String status;
 
   @HiveField(6)
+  User client;
+
+  @HiveField(7)
   Vehicle vehicle;
 
   Request({
+    required this.id,
     required this.to,
     required this.from,
     required this.client,
