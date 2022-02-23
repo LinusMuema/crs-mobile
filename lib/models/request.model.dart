@@ -67,6 +67,11 @@ class Request extends HiveObject {
     return NumberFormat().format((diff.inHours * vehicle.rate).round());
   }
 
+  String getTotalCost() {
+    var diff = start.difference(end).inHours;
+    return NumberFormat().format((diff * vehicle.rate).round());
+  }
+
   factory Request.fromJson(json) => _$RequestFromJson(json);
   Map<String, dynamic> toJson() => _$RequestToJson(this);
 }

@@ -149,7 +149,9 @@ class Requests extends GetWidget<DetailsController> {
   Widget status(Request request) {
     var text = request.status == 'accepted'
         ? 'Awaiting collection'
-        : request.status.capitalize;
+        : request.status == 'completed'
+            ? 'Earnings : Ksh. ${request.getTotalCost()}'
+            : request.status.capitalize;
     var style = request.status == 'rejected' ? heading5 : heading4;
     return Text(text!, style: style);
   }
@@ -157,25 +159,32 @@ class Requests extends GetWidget<DetailsController> {
   Widget collected(Request request) {
     var redBox = const BoxDecoration(color: red, borderRadius: fullRadius);
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        horizontalSpaceSmall,
-        Text('Earnings: Ksh 500', style: body4),
-        Container(
-          decoration: redBox,
-          width: Get.width * .3,
-          padding: smallVInsets,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              const Icon(Icons.close, color: white, size: 18),
-              Text('End session', style: body2),
-              horizontalSpaceTiny,
-            ],
-          ),
-        ),
-      ],
-    );
+    return Obx(() {
+      return controller.loading.value
+          ? threeBounce(color: black)
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                horizontalSpaceSmall,
+                Text('Earnings: Ksh ${request.getCost()}', style: body4),
+                GestureDetector(
+                  onTap: () => controller.endSession(request),
+                  child: Container(
+                    decoration: redBox,
+                    width: Get.width * .3,
+                    padding: smallVInsets,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        const Icon(Icons.close, color: white, size: 18),
+                        Text('End session', style: body2),
+                        horizontalSpaceTiny,
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+    });
   }
 }

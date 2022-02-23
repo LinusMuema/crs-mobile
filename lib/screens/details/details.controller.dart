@@ -147,6 +147,15 @@ class DetailsController extends GetxController {
     await updateRequest(data);
   }
 
+  void endSession(Request request) async {
+    dynamic data = {
+      'status': 'completed',
+      'request': request.id,
+      'end': DateTime.now().toString(),
+    };
+    await updateRequest(data);
+  }
+
   Future<void> updateRequest(dynamic data) async {
     loading.toggle();
     String endpoint = 'api/vehicles/request';
