@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crs/components/loaders.dart';
 import 'package:crs/screens/vehicle/vehicle.controller.dart';
@@ -25,9 +23,19 @@ class Vehicle extends GetView<VehicleController> {
 
     return Obx(() {
       var images = [upload()];
-      for (var e in controller.images) {
-        var index = controller.images.indexOf(e);
-        images.add(image(e, index));
+      for (var e in controller.urls) {
+        var index = controller.urls.indexOf(e);
+        images.add(image(index));
+      }
+
+      // If we're from edit, set the initial values
+      var vehicle = controller.vehicle.value;
+      var plate = "", model = "", color = "", description = "";
+      if (vehicle != null) {
+        plate = vehicle.plate;
+        color = vehicle.color;
+        model = vehicle.model;
+        description = vehicle.description;
       }
 
       return Scaffold(
@@ -53,6 +61,7 @@ class Vehicle extends GetView<VehicleController> {
                   FormBuilderTextField(
                     style: body1,
                     name: 'plate',
+                    initialValue: plate,
                     validator: validator,
                     decoration: InputDecoration(
                       labelStyle: body3,
@@ -91,6 +100,7 @@ class Vehicle extends GetView<VehicleController> {
                         child: FormBuilderTextField(
                           style: body1,
                           name: 'model',
+                          initialValue: model,
                           validator: validator,
                           decoration: InputDecoration(
                             labelStyle: body3,
@@ -107,6 +117,7 @@ class Vehicle extends GetView<VehicleController> {
                   FormBuilderTextField(
                     style: body1,
                     name: 'color',
+                    initialValue: color,
                     validator: validator,
                     decoration: InputDecoration(
                       labelStyle: body3,
@@ -122,6 +133,7 @@ class Vehicle extends GetView<VehicleController> {
                     style: body1,
                     name: 'description',
                     validator: validator,
+                    initialValue: description,
                     decoration: InputDecoration(
                       labelStyle: body3,
                       labelText: 'Description',
@@ -146,7 +158,7 @@ class Vehicle extends GetView<VehicleController> {
     });
   }
 
-  Widget image(Uint8List bytes, int index) {
+  Widget image(int index) {
     var loading = controller.uploading[index];
     return GestureDetector(
       onTap: () {
@@ -169,7 +181,6 @@ class Vehicle extends GetView<VehicleController> {
           borderRadius: fullRadius,
           child: Stack(
             children: [
-              Image.memory(bytes, fit: BoxFit.cover),
               !loading
                   ? CachedNetworkImage(
                       fit: BoxFit.cover,
