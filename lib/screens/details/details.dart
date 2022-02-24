@@ -223,7 +223,6 @@ class Details extends GetView<DetailsController> {
                 style: body1,
                 name: 'message',
                 validator: validator,
-                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   labelStyle: body3,
                   labelText: 'Reason',
@@ -254,6 +253,8 @@ class Details extends GetView<DetailsController> {
     var validator = FormBuilderValidators.compose([required]);
 
     return Obx(() {
+      var canList = controller.canList();
+
       return Padding(
         padding: regularInsets,
         child: FormBuilder(
@@ -263,66 +264,81 @@ class Details extends GetView<DetailsController> {
             children: [
               Text('List your vehicle', style: heading1),
               verticalSpaceSmall,
-              Row(
-                children: [
-                  Expanded(
-                    child: FormBuilderDateTimePicker(
-                      name: 'from',
-                      style: body1,
-                      validator: validator,
-                      valueTransformer: (DateTime? value) => value.toString(),
-                      format: DateFormat('yyyy/mm/dd hh:MM a'),
-                      decoration: InputDecoration(
-                        labelStyle: body3,
-                        labelText: 'From',
-                        enabledBorder: border,
-                        focusedBorder: border,
-                        errorBorder: errorBorder,
+              canList
+                  ? Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: FormBuilderDateTimePicker(
+                                name: 'from',
+                                style: body1,
+                                validator: validator,
+                                valueTransformer: (DateTime? value) =>
+                                    value.toString(),
+                                format: DateFormat('yyyy/mm/dd hh:MM a'),
+                                decoration: InputDecoration(
+                                  labelStyle: body3,
+                                  labelText: 'From',
+                                  enabledBorder: border,
+                                  focusedBorder: border,
+                                  errorBorder: errorBorder,
+                                ),
+                              ),
+                            ),
+                            horizontalSpaceSmall,
+                            Expanded(
+                              child: FormBuilderDateTimePicker(
+                                name: 'to',
+                                style: body1,
+                                validator: validator,
+                                format: DateFormat('yyyy/mm/dd hh:MM a'),
+                                valueTransformer: (DateTime? value) =>
+                                    value.toString(),
+                                decoration: InputDecoration(
+                                  labelStyle: body3,
+                                  labelText: 'To',
+                                  enabledBorder: border,
+                                  focusedBorder: border,
+                                  errorBorder: errorBorder,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        verticalSpaceSmall,
+                        FormBuilderTextField(
+                          style: body1,
+                          name: 'rate',
+                          validator: validator,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            prefixText: 'KSH ',
+                            labelStyle: body3,
+                            enabledBorder: border,
+                            focusedBorder: border,
+                            errorBorder: errorBorder,
+                            labelText: 'Rate per hour',
+                            prefixStyle:
+                                caption1.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        verticalSpaceSmall,
+                        ElevatedButton(
+                          onPressed: controller.listVehicle,
+                          child: controller.loading.value
+                              ? threeBounce()
+                              : Text('Submit', style: body2),
+                        ),
+                      ],
+                    )
+                  : Padding(
+                      padding: regularInsets,
+                      child: Text(
+                        'You cannot list this vehicle as there is an ongoing request.',
+                        style: body1,
                       ),
-                    ),
-                  ),
-                  horizontalSpaceSmall,
-                  Expanded(
-                    child: FormBuilderDateTimePicker(
-                      name: 'to',
-                      style: body1,
-                      validator: validator,
-                      format: DateFormat('yyyy/mm/dd hh:MM a'),
-                      valueTransformer: (DateTime? value) => value.toString(),
-                      decoration: InputDecoration(
-                        labelStyle: body3,
-                        labelText: 'To',
-                        enabledBorder: border,
-                        focusedBorder: border,
-                        errorBorder: errorBorder,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              verticalSpaceSmall,
-              FormBuilderTextField(
-                style: body1,
-                name: 'rate',
-                validator: validator,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  prefixText: 'KSH ',
-                  labelStyle: body3,
-                  enabledBorder: border,
-                  focusedBorder: border,
-                  errorBorder: errorBorder,
-                  labelText: 'Rate per hour',
-                  prefixStyle: caption1.copyWith(fontWeight: FontWeight.bold),
-                ),
-              ),
-              verticalSpaceSmall,
-              ElevatedButton(
-                onPressed: controller.listVehicle,
-                child: controller.loading.value
-                    ? threeBounce()
-                    : Text('Submit', style: body2),
-              )
+                    )
             ],
           ),
         ),
