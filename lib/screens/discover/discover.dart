@@ -79,7 +79,8 @@ class Discover extends GetView<DiscoverController> {
                   physics: const BouncingScrollPhysics(),
                   controller: ctrl,
                   child: Card(
-                    elevation: 10,
+                    color: white,
+                    elevation: 0,
                     margin: EdgeInsets.zero,
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.vertical(
@@ -193,29 +194,28 @@ class Discover extends GetView<DiscoverController> {
             ),
             horizontalSpaceSmall,
             Expanded(
-              child: SizedBox(
-                height: Get.width * .2,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(vehicle.getName()!, style: heading1),
-                        Text(vehicle.user.phone, style: body1),
-                      ],
-                    ),
-                    verticalSpaceTiny,
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Available from:', style: body1),
-                        Text('8:00 am To 5:00 am', style: body1),
-                      ],
-                    )
-                  ],
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(vehicle.getName()!, style: heading1),
+                      Text(vehicle.user.phone, style: body1),
+                    ],
+                  ),
+                  verticalSpaceTiny,
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Available from:', style: body1),
+                      Text('8:00 am To 5:00 am', style: body1),
+                    ],
+                  )
+                ],
               ),
             ),
             Text('Ksh ${vehicle.rate}/hr', style: body4)

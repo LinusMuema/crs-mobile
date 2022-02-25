@@ -47,7 +47,8 @@ class Transactions extends GetView<TransactionsController> {
     var style = request.status == 'rejected' ? heading5 : heading4;
     var greenBox = const BoxDecoration(color: green, borderRadius: fullRadius);
 
-    return SizedBox(
+    return Container(
+      margin: regularVInsets,
       height: Get.width * .2,
       child: Row(
         children: [
