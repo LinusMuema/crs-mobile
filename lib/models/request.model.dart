@@ -12,42 +12,29 @@ part 'request.model.g.dart';
 @HiveType(typeId: Constants.REQUEST_TYPE)
 class Request extends HiveObject {
   @HiveField(0)
-  @JsonKey(name: '_id')
-  String id;
-
-  @HiveField(1)
   DateTime to;
 
-  @HiveField(2)
+  @HiveField(1)
   DateTime from;
 
-  @HiveField(3)
+  @HiveField(2)
   List<Location> locations;
 
-  @HiveField(4)
+  @HiveField(3)
   String message;
 
-  @HiveField(5)
+  @HiveField(4)
   String status;
 
-  @HiveField(6)
+  @HiveField(5)
   User client;
 
-  @HiveField(7)
+  @HiveField(6)
   Vehicle vehicle;
 
-  @HiveField(8)
-  DateTime start;
-
-  @HiveField(9)
-  DateTime end;
-
   Request({
-    required this.id,
     required this.to,
-    required this.end,
     required this.from,
-    required this.start,
     required this.client,
     required this.status,
     required this.message,
@@ -59,17 +46,6 @@ class Request extends HiveObject {
     var end = DateFormat("hh:MM a").format(to);
     var start = DateFormat("hh:MM a").format(from);
     return '$start to $end';
-  }
-
-  String getCost() {
-    var zoneDiff = const Duration(hours: 2); // Due to mongoDB
-    var diff = start.subtract(zoneDiff).difference(DateTime.now());
-    return NumberFormat().format((diff.inHours * vehicle.rate).round());
-  }
-
-  String getTotalCost() {
-    var diff = start.difference(end).inHours;
-    return NumberFormat().format((diff * vehicle.rate).round());
   }
 
   factory Request.fromJson(json) => _$RequestFromJson(json);

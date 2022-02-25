@@ -58,13 +58,16 @@ class DiscoverController extends GetxController {
     double currentLat = current.value!.latitude;
     double currentLng = current.value!.longitude;
     dynamic data = {'lat': currentLat, 'lng': currentLng};
+    print("data is $data");
 
     Response response = await networkService.post(endpoint, data);
     if (response.isOk) {
       var items = response.body as List;
+      print("items are $items");
       available = items.map((e) => Vehicle.fromJson(e)).toList();
       filtered.value = available;
     } else {
+      print("error is ${response.bodyString}");
       String message = response.body['message'];
       snackBar('Error', message);
     }
