@@ -1,25 +1,25 @@
+import 'package:background_location/background_location.dart';
 import 'package:crs/components/snackbars.dart';
 import 'package:crs/models/vehicle.model.dart';
 import 'package:crs/routes/routes.dart';
+import 'package:crs/services/background.service.dart';
 import 'package:crs/services/hive.service.dart';
-import 'package:crs/services/location.service.dart';
 import 'package:crs/services/network.service.dart';
 import 'package:crs/utils/constants.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class DiscoverController extends GetxController {
   final HiveService hiveService = Get.find();
   final NetworkService networkService = Get.find();
-  final LocationService locationService = Get.find();
+  final BackgroundService backgroundService = Get.find();
 
   CustomInfoWindowController windowController = CustomInfoWindowController();
 
   List<Vehicle> available = [];
-  Rxn<Position> current = Rxn();
+  Rxn<Location> current = Rxn();
   Rxn<BitmapDescriptor> icon = Rxn();
   RxList<Vehicle> filtered = <Vehicle>[].obs;
   Rxn<GoogleMapController> mapController = Rxn();
@@ -40,7 +40,7 @@ class DiscoverController extends GetxController {
       const ImageConfiguration(),
       'assets/images/car-icon.png',
     );
-    current.value = await locationService.getCurrentLocation();
+    current.value = await backgroundService.location.stream.first;
     getVehicles();
   }
 
@@ -55,8 +55,8 @@ class DiscoverController extends GetxController {
   void getVehicles() async {
     String endpoint = 'api/vehicles/nearby';
 
-    double currentLat = current.value!.latitude;
-    double currentLng = current.value!.longitude;
+    double currentLat = current.value!.latitude!;
+    double currentLng = current.value!.longitude!;
     dynamic data = {'lat': currentLat, 'lng': currentLng};
 
     Response response = await networkService.post(endpoint, data);

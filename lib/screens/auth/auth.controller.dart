@@ -96,6 +96,6 @@ class AuthController extends GetxController {
 
   void updateServices() {
     networkService.setToken();
-    backgroundService.observeLocation();
+    // TODO: update the service
   }
 }

@@ -63,12 +63,13 @@ class Request extends HiveObject {
 
   String getCost() {
     var zoneDiff = const Duration(hours: 2); // Due to mongoDB
-    var diff = start.subtract(zoneDiff).difference(DateTime.now());
+    var diff = DateTime.now().difference(start.subtract(zoneDiff));
     return NumberFormat().format((diff.inHours * vehicle.rate).round());
   }
 
   String getTotalCost() {
-    var diff = start.difference(end).inHours;
+    print("start is $start and end is $end");
+    var diff = end.difference(start).inHours;
     return NumberFormat().format((diff * vehicle.rate).round());
   }
 

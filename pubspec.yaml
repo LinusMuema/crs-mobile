@@ -16,7 +16,6 @@ dependencies:
   hive:
   lottie:
   animations:
-  geolocator:
   flutter_svg:
   workmanager:
   hive_flutter:

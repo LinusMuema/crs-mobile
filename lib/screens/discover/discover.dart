@@ -25,7 +25,7 @@ class Discover extends GetView<DiscoverController> {
       if (current != null) {
         var mapController = controller.mapController.value!;
 
-        target = LatLng(current.latitude, current.longitude);
+        target = LatLng(current.latitude!, current.longitude!);
         position = CameraPosition(target: target, zoom: 16);
         mapController.animateCamera(CameraUpdate.newCameraPosition(position));
 

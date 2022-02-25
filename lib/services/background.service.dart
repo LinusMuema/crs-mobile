@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:background_location/background_location.dart';
 import 'package:crs/models/location.model.dart' as model;
 import 'package:crs/models/user.model.dart';
@@ -10,20 +12,21 @@ class BackgroundService extends GetxService {
   final HiveService hiveService = Get.find();
   final NetworkService networkService = Get.find();
 
+  final StreamController<Location> location = StreamController();
+
   Future<BackgroundService> init() async {
     BackgroundLocation.startLocationService();
+    BackgroundLocation.getLocationUpdates(updateLocation);
     return this;
   }
 
-  void observeLocation() {
-    BackgroundLocation.getLocationUpdates(updateLocation);
-  }
+  void updateLocation(Location data) async {
+    location.sink.add(data);
 
-  void updateLocation(Location location) async {
     User user = hiveService.get(Constants.USER);
 
-    double lat = location.latitude ?? 0.0;
-    double lng = location.longitude ?? 0.0;
+    double lat = data.latitude ?? 0.0;
+    double lng = data.longitude ?? 0.0;
     user.location = model.Location(coordinates: [lng, lat]);
 
     // update local user

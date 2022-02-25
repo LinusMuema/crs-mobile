@@ -7,6 +7,7 @@ import 'package:crs/theme/dimens.dart';
 import 'package:crs/theme/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class Requests extends GetWidget<DetailsController> {
   const Requests({Key? key}) : super(key: key);
@@ -26,6 +27,17 @@ class Requests extends GetWidget<DetailsController> {
             itemCount: controller.requests.length,
             itemBuilder: (context, index) {
               var request = controller.requests[index];
+              var format = DateFormat("yyyy-mm-dd hh:MM a");
+
+              var date = format.format(request.to);
+              // format the date like this: "Mon 24th, 20:00"
+              var dateFormatted = DateFormat.EEEE()
+                  .add_d()
+                  .add_jm()
+                  .format(request.to);
+
+              var to = format.format(request.to);
+              var from = format.format(request.from);
               return Padding(
                 padding: regularVInsets,
                 child: Column(
@@ -65,8 +77,8 @@ class Requests extends GetWidget<DetailsController> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text('Renting from:', style: body1),
-                                      Text(request.getRange(), style: body1)
+                                      Text('From: $dateFormatted', style: body1),
+                                      Text('To: $to', style: body1)
                                     ],
                                   ),
                                 ],
