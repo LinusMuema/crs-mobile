@@ -223,7 +223,6 @@ class Details extends GetView<DetailsController> {
                 style: body1,
                 name: 'message',
                 validator: validator,
-                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   labelStyle: body3,
                   labelText: 'Reason',

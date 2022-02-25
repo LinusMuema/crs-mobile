@@ -21,3 +21,4 @@ TextStyle heading1 = GoogleFonts.nunito(textStyle: textTheme.headline4);
 TextStyle heading2 = heading1.copyWith(color: white);
 TextStyle heading3 = heading1.copyWith(color: grey);
 TextStyle heading4 = heading1.copyWith(color: green);
+TextStyle heading5 = heading1.copyWith(color: red);
